@@ -120,7 +120,7 @@ export default async function AvisPage({
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  const avis = (avisRows ?? []) as AvisRow[];
+  const avis = (avisRows ?? []) as unknown as AvisRow[];
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   // Pagination URL helper
