@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 // profil est un Record<string, string> libre — la validation
 // des champs requis se fait manuellement dans goNext().
 const schema = z.object({
-  profil: z.record(z.string()).default({}),
+  profil: z.record(z.string(), z.string()).default({}),
   note: z.number({ error: "Donnez une note" }).min(1).max(5),
   recommande: z.boolean({ error: "Répondez à cette question" }),
   avis_texte: z.string().min(50, "50 caractères minimum"),
