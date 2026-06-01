@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewWall — Pour les formateurs</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a18;background:#f5f4f0;font-size:14px}
+.wrap{max-width:720px;margin:0 auto;background:white}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:0.5px solid #D3D1C7;background:white;position:sticky;top:0;z-index:10}
+.nav-logo{font-size:16px;font-weight:500}.nav-logo span{color:#7F77DD}
+.nav-back{font-size:12px;color:#5F5E5A;text-decoration:none}
+.nav-cta{background:#1a1a18;color:white;font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;cursor:pointer}
+
+/* HERO */
+.hero{padding:3rem 1.5rem 2.5rem;background:white;border-bottom:0.5px solid #F1EFE8}
+.hero-badge{display:inline-block;background:#1a1a18;color:white;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;margin-bottom:14px}
+.hero-title{font-size:28px;font-weight:500;line-height:1.3;margin-bottom:12px}
+.hero-title span{color:#7F77DD}
+.hero-sub{font-size:15px;color:#5F5E5A;line-height:1.75;max-width:540px;margin-bottom:2rem}
+.hero-sub strong{color:#1a1a18;font-weight:500}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2rem}
+.hp{display:inline-flex;align-items:center;gap:6px;background:#F1EFE8;border:0.5px solid #D3D1C7;border-radius:20px;font-size:12px;color:#5F5E5A;padding:5px 12px}
+.hp-ok{color:#1D9E75;font-weight:600}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-p{background:#1a1a18;color:white;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;cursor:pointer}
+.btn-s{background:transparent;color:#1a1a18;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:0.5px solid #B4B2A9;cursor:pointer}
+
+/* SECTIONS */
+.sec{padding:2.5rem 1.5rem}
+.sec-alt{padding:2.5rem 1.5rem;background:#F5F4F0}
+.slbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:#888780;margin-bottom:6px}
+.stitle{font-size:20px;font-weight:500;margin-bottom:.75rem;line-height:1.3}
+.ssub{font-size:13px;color:#5F5E5A;line-height:1.65;margin-bottom:1.5rem}
+
+/* REPLACE */
+.replace-card{background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:12px;padding:1.5rem;margin-bottom:0}
+.rc-title{font-size:13px;font-weight:500;color:#412402;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rc-lbl{font-size:11px;font-weight:600;margin-bottom:8px;letter-spacing:.03em}
+.old{color:#854F0B}.new{color:#085041}
+.ri{display:flex;align-items:flex-start;gap:6px;font-size:12px;margin-bottom:5px;line-height:1.4}
+.ri-old{color:#633806}.ri-new{color:#0F6E56}
+.x{color:#A32D2D;font-size:13px;flex-shrink:0;margin-top:1px;font-weight:600}
+.ck{color:#1D9E75;font-size:13px;flex-shrink:0;margin-top:1px;font-weight:600}
+
+/* VALUE 4 */
+.v4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vc{background:white;border:0.5px solid #D3D1C7;border-radius:12px;padding:1.25rem;position:relative;overflow:hidden}
+.vc-accent{position:absolute;top:0;left:0;width:3px;height:100%;background:#7F77DD}
+.vc-accent-q{background:#3C3489}
+.vc-accent-w{background:#1D9E75}
+.vc-accent-r{background:#0C447C}
+.vc-num{font-size:11px;font-weight:600;color:#B4B2A9;margin-bottom:8px;letter-spacing:.04em}
+.vc-title{font-size:13px;font-weight:600;margin-bottom:5px}
+.vc-desc{font-size:12px;color:#5F5E5A;line-height:1.45}
+.vc-q{background:#EEEDFE;border-color:#AFA9EC}
+.vc-q .vc-num{color:#AFA9EC}
+.vc-q .vc-title{color:#26215C}
+.vc-q .vc-desc{color:#534AB7}
+
+/* OUTIL WIDGET VISUEL */
+.tool-block{background:white;border:0.5px solid #D3D1C7;border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.tool-header{background:#1a1a18;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.th-dots{display:flex;gap:5px}
+.th-dot{width:10px;height:10px;border-radius:50%}
+.td-r{background:#FF5F56}.td-y{background:#FFBD2E}.td-g{background:#27C93F}
+.th-label{font-size:11px;color:#888780;margin-left:8px}
+.tool-body{padding:1.25rem}
+
+/* WIDGET SIMULÉ */
+.widget-shell{background:#F5F4F0;border-radius:10px;padding:1rem;border:0.5px solid #D3D1C7}
+.ws-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.ws-info .ws-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.ws-info .ws-stars{color:#BA7517;font-size:13px}
+.ws-info .ws-count{font-size:11px;color:#5F5E5A;margin-top:2px}
+.ws-cert{background:#EAF3DE;color:#27500A;font-size:10px;font-weight:600;padding:4px 8px;border-radius:20px;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.avis-item{background:white;border-radius:8px;padding:10px 12px;margin-bottom:6px;border:0.5px solid #E8E6DF}
+.avis-item:last-child{margin-bottom:0}
+.ai-stars{color:#BA7517;font-size:11px;margin-bottom:4px}
+.ai-text{font-size:12px;color:#1a1a18;line-height:1.45;margin-bottom:6px}
+.ai-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px}
+.ait{background:#EEEDFE;color:#3C3489;font-size:10px;font-weight:500;padding:1px 7px;border-radius:10px}
+.ai-badge{display:inline-flex;align-items:center;gap:3px;background:#EAF3DE;color:#27500A;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+.ws-foot{font-size:10px;color:#AFA9EC;text-align:center;margin-top:10px;padding-top:8px;border-top:0.5px solid #E8E6DF}
+.ws-caption{font-size:12px;color:#5F5E5A;margin-top:10px;line-height:1.5;font-style:italic;text-align:center}
+
+/* DASHBOARD SIMULÉ */
+.dash-shell{background:#F5F4F0;border-radius:10px;padding:1rem;border:0.5px solid #D3D1C7}
+.dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dash-title{font-size:13px;font-weight:600}
+.dash-period{font-size:11px;color:#5F5E5A;background:white;border:0.5px solid #D3D1C7;padding:3px 8px;border-radius:6px}
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.kpi{background:white;border-radius:8px;padding:10px;text-align:center;border:0.5px solid #E8E6DF}
+.kpi-val{font-size:20px;font-weight:600;color:#1a1a18}
+.kpi-val.purple{color:#7F77DD}
+.kpi-val.green{color:#1D9E75}
+.kpi-val.blue{color:#0C447C}
+.kpi-lbl{font-size:10px;color:#888780;margin-top:2px;line-height:1.2}
+.dash-charts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chart-box{background:white;border-radius:8px;padding:10px;border:0.5px solid #E8E6DF}
+.chart-title{font-size:11px;font-weight:600;color:#5F5E5A;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.bar-r{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.bar-l{font-size:10px;color:#5F5E5A;width:62px;flex-shrink:0;line-height:1.2}
+.bar-t{flex:1;background:#F1EFE8;border-radius:3px;height:6px;overflow:hidden}
+.bar-f{height:6px;border-radius:3px}
+.bf-purple{background:#7F77DD}
+.bf-teal{background:#1D9E75}
+.bar-v{font-size:10px;font-weight:600;color:#1a1a18;width:26px;text-align:right;flex-shrink:0}
+.dash-caption{font-size:12px;color:#5F5E5A;margin-top:10px;line-height:1.5;font-style:italic;text-align:center}
+
+/* AGG */
+.agg-card{background:white;border:1.5px solid #85B7EB;border-radius:12px;padding:1.5rem;margin-bottom:12px}
+.agg-badge{display:inline-block;background:#E6F1FB;color:#0C447C;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.agg-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.agg-desc{font-size:13px;color:#5F5E5A;line-height:1.65;margin-bottom:14px}
+.flow{display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+.flow-step{background:#F5F4F0;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 10px;font-size:11px;color:#5F5E5A;text-align:center;flex-shrink:0;min-width:100px}
+.flow-step strong{display:block;font-size:12px;font-weight:600;color:#1a1a18;margin-bottom:2px}
+.flow-arr{font-size:16px;color:#D3D1C7;padding:0 4px;flex-shrink:0}
+
+/* BETA ENCART */
+.beta-card{background:#1a1a18;border-radius:12px;padding:1.5rem;color:white}
+.beta-badge{display:inline-block;background:#7F77DD;color:white;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:12px}
+.beta-title{font-size:16px;font-weight:500;margin-bottom:8px}
+.beta-desc{font-size:13px;color:#888780;line-height:1.65;margin-bottom:16px}
+.beta-avantages{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.ba{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#D3D1C7}
+.ba-icon{color:#7F77DD;flex-shrink:0;font-weight:700;margin-top:1px}
+.beta-places{background:#2C2C2A;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.bp-text{font-size:12px;color:#888780}
+.bp-count{font-size:13px;font-weight:600;color:#AFA9EC}
+.beta-form{display:flex;gap:8px}
+.beta-input{flex:1;background:#2C2C2A;border:0.5px solid #444441;border-radius:8px;padding:10px 12px;font-size:13px;color:white}
+.beta-input::placeholder{color:#5F5E5A}
+.beta-btn{background:#7F77DD;color:white;font-size:13px;font-weight:600;padding:10px 16px;border-radius:8px;white-space:nowrap;flex-shrink:0;cursor:pointer}
+.beta-mention{font-size:11px;color:#444441;margin-top:8px}
+
+/* PLANS */
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+.plan{background:white;border:0.5px solid #D3D1C7;border-radius:12px;padding:1rem}
+.plan-pro{border:1.5px solid #7F77DD}
+.pbadge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
+.pb-f{background:#F1EFE8;color:#5F5E5A}
+.pb-st{background:#E6F1FB;color:#0C447C}
+.pb-pr{background:#EEEDFE;color:#3C3489}
+.pb-sc{background:#E1F5EE;color:#085041}
+.plan-name{font-size:14px;font-weight:600;margin-bottom:3px}
+.plan-desc{font-size:11px;color:#888780;margin-bottom:10px;line-height:1.3}
+.pi{display:flex;align-items:flex-start;gap:4px;font-size:11px;color:#5F5E5A;margin-bottom:3px;line-height:1.3}
+.pi span{font-size:12px;flex-shrink:0;margin-top:1px}
+.pi-ok{color:#1D9E75}.pi-no{color:#D3D1C7}.pi-star{color:#7F77DD}
+.plans-note{font-size:12px;color:#888780;text-align:center}
+
+/* FAQ */
+.faq-item{border-bottom:0.5px solid #F1EFE8;padding:12px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:13px;font-weight:600;margin-bottom:4px;color:#1a1a18}
+.faq-a{font-size:12px;color:#5F5E5A;line-height:1.6}
+
+/* QUESTIONS IA */
+.qia-block{background:white;border:0.5px solid #D3D1C7;border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.qia-header{background:#1a1a18;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.qia-body{padding:1.25rem}
+.qia-intro{font-size:12px;color:#5F5E5A;line-height:1.6;margin-bottom:14px;background:#F5F4F0;border-radius:8px;padding:10px 12px;border-left:3px solid #7F77DD}
+.qia-row{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.qia-input-area{flex:1;background:#F5F4F0;border:0.5px solid #D3D1C7;border-radius:8px;padding:10px 12px;font-size:12px;color:#1a1a18;line-height:1.45}
+.qia-label{font-size:10px;font-weight:600;color:#888780;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.qia-status{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;font-size:11px;font-weight:600}
+.qia-ok{background:#EAF3DE;color:#27500A;border:0.5px solid #A8D68A}
+.qia-warn{background:#FEF3E2;color:#7A4000;border:0.5px solid #EFBF72}
+.qia-sug{background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;font-size:11px;font-weight:400;padding:8px 10px;border-radius:8px;line-height:1.4;margin-top:4px}
+.qia-sug strong{font-weight:600;display:block;margin-bottom:2px}
+.qia-types{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.qia-type{background:#F5F4F0;border-radius:8px;padding:10px;border:0.5px solid #D3D1C7}
+.qia-type-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:5px}
+.qt-pub{background:#EEEDFE;color:#3C3489}
+.qt-priv{background:#E6F1FB;color:#0C447C}
+.qt-qual{background:#EAF3DE;color:#27500A}
+.qia-type-title{font-size:12px;font-weight:600;margin-bottom:3px}
+.qia-type-desc{font-size:11px;color:#5F5E5A;line-height:1.4}
+
+/* PROFIL ENRICHI BLOC */
+.profile-pill{display:inline-flex;align-items:center;gap:4px;background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:12px;font-size:10px;font-weight:500;color:#3C3489;padding:3px 8px;margin:2px}
+.profile-pill-inferred{background:#E6F1FB;border-color:#85B7EB;color:#0C447C}
+.profile-pill-domain{background:#EAF3DE;border-color:#A8D68A;color:#27500A}
+
+/* COMPARATIF CONCURRENTS */
+.cmp-wrap{background:white;border:0.5px solid #D3D1C7;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.cmp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cmp-table{display:grid;grid-template-columns:1.4fr repeat(4,1fr) 1.2fr;min-width:640px}
+.cmp-head{background:#1a1a18;color:white;font-size:11px;font-weight:600;padding:14px 8px;text-align:center;line-height:1.3;letter-spacing:.01em;border-right:0.5px solid #2C2C2A}
+.cmp-head:first-child{text-align:left;padding-left:14px;background:#1a1a18}
+.cmp-head:last-child{border-right:none;background:#3C3489;position:relative}
+.cmp-head-tag{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#AFA9EC;margin-bottom:3px;display:block}
+.cmp-head-sub{font-size:10px;font-weight:400;color:#888780;margin-top:3px;display:block}
+.cmp-head:last-child .cmp-head-sub{color:#C9C5F0}
+.cmp-row{display:contents}
+.cmp-cell{padding:12px 8px;font-size:11px;text-align:center;border-bottom:0.5px solid #F1EFE8;border-right:0.5px solid #F5F4F0;color:#5F5E5A;display:flex;align-items:center;justify-content:center;line-height:1.4}
+.cmp-cell:first-child{text-align:left;justify-content:flex-start;padding-left:14px;color:#1a1a18;font-weight:500;font-size:11.5px}
+.cmp-cell:last-child{background:#F8F7FE;border-right:none;font-weight:600;color:#26215C}
+.cmp-row:last-child .cmp-cell{border-bottom:none}
+.cmp-yes{color:#1D9E75;font-size:15px;font-weight:700}
+.cmp-no{color:#C8C5BB;font-size:14px;font-weight:600}
+.cmp-half{color:#BA7517;font-size:14px;font-weight:600}
+.cmp-cell small{display:block;font-size:9.5px;color:#888780;margin-top:2px;font-weight:400;line-height:1.3}
+.cmp-cell:last-child small{color:#534AB7}
+.cmp-foot{padding:14px;background:#F5F4F0;border-top:0.5px solid #E8E6DF;font-size:11px;color:#5F5E5A;line-height:1.55;font-style:italic}
+.cmp-hint{font-size:10px;color:#888780;text-align:center;margin-top:8px;font-style:italic}
+
+/* PLANS - amélioration v4 */
+.plans-intro-note{background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:10px;padding:11px 14px;margin-bottom:1.25rem;font-size:12px;color:#412402;line-height:1.55;display:flex;gap:10px;align-items:flex-start}
+.plans-intro-note-icon{flex-shrink:0;font-size:14px}
+.plan-pro{border:1.5px solid #7F77DD;position:relative;box-shadow:0 4px 20px rgba(127,119,221,.18)}
+.plan-pro-flag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#7F77DD;color:white;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+
+@media(max-width:540px){
+  .v4,.rc-grid,.dash-charts,.beta-avantages,.plans{grid-template-columns:1fr}
+  .dash-kpis{grid-template-columns:repeat(2,1fr)}
+  .flow{flex-wrap:wrap}
+  .hero-title{font-size:22px}
+  .cmp-table{min-width:580px}
+  .cmp-head,.cmp-cell{font-size:10.5px;padding:10px 6px}
+  .cmp-cell:first-child{font-size:11px;padding-left:10px}
+  .cmp-cell small{font-size:9px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-logo">Review<span>Wall</span></div>
+  <a class="nav-back" href="#">← Accueil</a>
+  <div class="nav-cta">Rejoindre la beta</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Pour les formateurs et organismes de formation</div>
+  <div class="hero-title">La preuve sociale qui convertit —<br><span>vos formations le méritent</span></div>
+  <div class="hero-sub">ReviewWall collecte des avis profilés sur vos formations — <strong>secteur d'origine, niveau de départ, objectif déclaré.</strong> Vos futurs apprenants lisent des retours de gens qui leur ressemblent. Vous savez enfin qui réussit chez vous.</div>
+  <div class="hero-pills">
+    <div class="hp"><span class="hp-ok">✓</span>Avis sur les formations, pas les organismes</div>
+    <div class="hp"><span class="hp-ok">✓</span>Sans carte bancaire</div>
+    <div class="hp"><span class="hp-ok">✓</span>Compte en 3 minutes</div>
+    <div class="hp"><span class="hp-ok">✓</span>Collecte Qualiopi incluse (Pro)</div>
+  </div>
+  <div class="hero-cta">
+    <div class="btn-p">Rejoindre la beta gratuite →</div>
+    <div class="btn-s">Voir comment ça marche</div>
+  </div>
+</div>
+
+<!-- PROBLÈME -->
+<div class="sec-alt">
+  <div class="slbl">Le problème</div>
+  <div class="stitle">Votre Google Form ne travaille pas pour vous</div>
+  <div class="replace-card">
+    <div class="rc-title">↔ ReviewWall remplace votre Google Form de fin de formation</div>
+    <div class="rc-grid">
+      <div>
+        <div class="rc-lbl old">Avec Google Form</div>
+        <div class="ri ri-old"><span class="x">✕</span>Données inutilisables pour vos prospects</div>
+        <div class="ri ri-old"><span class="x">✕</span>Aucune preuve sociale générée</div>
+        <div class="ri ri-old"><span class="x">✕</span>Pas de couverture Qualiopi</div>
+        <div class="ri ri-old"><span class="x">✕</span>Taux de réponse faible</div>
+        <div class="ri ri-old"><span class="x">✕</span>Aucun insight par profil apprenant</div>
+      </div>
+      <div>
+        <div class="rc-lbl new">Avec ReviewWall</div>
+        <div class="ri ri-new"><span class="ck">✓</span>Avis profilés visibles sur votre site</div>
+        <div class="ri ri-new"><span class="ck">✓</span>Preuve sociale qui convertit</div>
+        <div class="ri ri-new"><span class="ck">✓</span>Collecte Qualiopi intégrée (Pro)</div>
+        <div class="ri ri-new"><span class="ck">✓</span>Collecte automatisée J+7 / J+30</div>
+        <div class="ri ri-new"><span class="ck">✓</span>Dashboard segmentation par profil</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 VALEURS -->
+<div class="sec">
+  <div class="slbl">Ce que vous obtenez</div>
+  <div class="stitle">Quatre raisons de choisir ReviewWall</div>
+  <div class="v4">
+    <div class="vc">
+      <div class="vc-accent"></div>
+      <div style="padding-left:10px">
+        <div class="vc-num">01</div>
+        <div class="vc-title">Avis profilés sur vos formations</div>
+        <div class="vc-desc">Chaque avis affiche le profil déclaré de l'apprenant — secteur, niveau, objectif. Vos prospects lisent des retours de gens qui leur ressemblent exactement.</div>
+      </div>
+    </div>
+    <div class="vc vc-q">
+      <div class="vc-accent vc-accent-q"></div>
+      <div style="padding-left:10px">
+        <div class="vc-num">02</div>
+        <div class="vc-title">Collecte Qualiopi sans friction</div>
+        <div class="vc-desc">Templates de collecte conformes au référentiel Qualiopi pour vos indicateurs de résultats (indicateur 2). Dashboard exportable pour vos audits.</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vc-accent vc-accent-w"></div>
+      <div style="padding-left:10px">
+        <div class="vc-num">03</div>
+        <div class="vc-title">Widget intelligent sur votre site</div>
+        <div class="vc-desc">Copier-coller, compatible tous CMS. Remonte automatiquement les avis les plus pertinents pour chaque visiteur selon son profil détecté.</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vc-accent vc-accent-r"></div>
+      <div style="padding-left:10px">
+        <div class="vc-num">04</div>
+        <div class="vc-title">Leads depuis notre catalogue</div>
+        <div class="vc-desc">Votre formation est référencée sur reviewwall.fr. Chaque avis collecté améliore votre position et génère du trafic qualifié vers vous.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WIDGET VISUEL -->
+<div class="sec-alt">
+  <div class="slbl">Outil n°1</div>
+  <div class="stitle">Le widget — vos avis sur votre site, enfin utiles</div>
+  <div class="ssub">Un snippet à copier-coller sur votre page de formation. Compatible WordPress, Teachizy, Systeme.io, Learnybox et tout site custom. En plan Pro : le widget détecte le profil du visiteur et remonte silencieusement les avis les plus pertinents — sans aucun score visible qui créerait du doute.</div>
+
+  <div class="tool-block">
+    <div class="tool-header">
+      <div class="th-dots">
+        <div class="th-dot td-r"></div>
+        <div class="th-dot td-y"></div>
+        <div class="th-dot td-g"></div>
+      </div>
+      <div class="th-label">votre-site.fr/ma-formation</div>
+    </div>
+    <div class="tool-body">
+      <div class="widget-shell">
+        <div class="ws-head">
+          <div class="ws-info">
+            <div class="ws-name">Formation développeur web</div>
+            <div class="ws-stars">★★★★★</div>
+            <div class="ws-count">4,8 · 38 avis profilés vérifiés</div>
+          </div>
+          <div class="ws-cert">✦ Certifié ReviewWall</div>
+        </div>
+        <div class="avis-item">
+          <div class="ai-stars">★★★★★</div>
+          <div class="ai-text">"Reconversion réussie en 10 semaines depuis le secteur santé. Zéro base au départ, app complète à la fin. Les projets hebdomadaires ont été décisifs dans ma progression."</div>
+          <div class="ai-tags">
+            <span class="ait">Santé → Dev</span>
+            <span class="ait">Débutant complet</span>
+            <span class="ait">Reconversion</span>
+          </div>
+          <div class="ai-badge">✓ Vérifié LMS</div>
+        </div>
+        <div class="avis-item">
+          <div class="ai-stars">★★★★☆</div>
+          <div class="ai-text">"Intensif mais efficace. Venant de l'industrie avec quelques bases, j'ai décroché un poste dev junior en 2 mois. Prévoir 2 semaines de prépa si débutant complet."</div>
+          <div class="ai-tags">
+            <span class="ait">Industrie → Dev</span>
+            <span class="ait">Quelques bases</span>
+          </div>
+          <div class="ai-badge">✓ Vérifié LMS</div>
+        </div>
+        <div class="ws-foot">Propulsé par ReviewWall · Voir les 38 avis →</div>
+      </div>
+      <div class="ws-caption">Tri silencieux par profil visiteur (Pro) — aucun score affiché, conversion maximale</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD VISUEL -->
+<div class="sec">
+  <div class="slbl">Outil n°2</div>
+  <div class="stitle">Le dashboard — ce que vos avis vous apprennent vraiment</div>
+  <div class="ssub">Segmentation par profil, taux de réussite par niveau, leads générés depuis le catalogue. Et depuis la v2 : insights sur les dimensions inférées par IA — ce que vos apprenants ne vous disent pas mais que leurs réponses révèlent.</div>
+
+  <div class="tool-block">
+    <div class="tool-header">
+      <div class="th-dots">
+        <div class="th-dot td-r"></div>
+        <div class="th-dot td-y"></div>
+        <div class="th-dot td-g"></div>
+      </div>
+      <div class="th-label">app.reviewwall.fr · Dashboard formateur</div>
+    </div>
+    <div class="tool-body">
+      <div class="dash-shell">
+        <div class="dash-topbar">
+          <div class="dash-title">Formation développeur web · Capsule Lille</div>
+          <div class="dash-period">30 derniers jours</div>
+        </div>
+        <div class="dash-kpis">
+          <div class="kpi">
+            <div class="kpi-val purple">38</div>
+            <div class="kpi-lbl">avis profilés</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val">4,8</div>
+            <div class="kpi-lbl">note moyenne</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val green">14</div>
+            <div class="kpi-lbl">leads catalogue</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val blue">94%</div>
+            <div class="kpi-lbl">taux complétion</div>
+          </div>
+        </div>
+        <div class="dash-charts">
+          <div class="chart-box">
+            <div class="chart-title">Note par secteur d'origine</div>
+            <div class="bar-r"><div class="bar-l">Santé</div><div class="bar-t"><div class="bar-f bf-purple" style="width:96%"></div></div><div class="bar-v">4,8</div></div>
+            <div class="bar-r"><div class="bar-l">Services</div><div class="bar-t"><div class="bar-f bf-purple" style="width:92%"></div></div><div class="bar-v">4,6</div></div>
+            <div class="bar-r"><div class="bar-l">Industrie</div><div class="bar-t"><div class="bar-f bf-purple" style="width:88%"></div></div><div class="bar-v">4,4</div></div>
+            <div class="bar-r"><div class="bar-l">Admin</div><div class="bar-t"><div class="bar-f bf-purple" style="width:84%"></div></div><div class="bar-v">4,2</div></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">Réussite par niveau de départ</div>
+            <div class="bar-r"><div class="bar-l">Intermédiaire</div><div class="bar-t"><div class="bar-f bf-teal" style="width:98%"></div></div><div class="bar-v">98%</div></div>
+            <div class="bar-r"><div class="bar-l">Quelques bases</div><div class="bar-t"><div class="bar-f bf-teal" style="width:94%"></div></div><div class="bar-v">94%</div></div>
+            <div class="bar-r"><div class="bar-l">Zéro base</div><div class="bar-t"><div class="bar-f bf-teal" style="width:78%"></div></div><div class="bar-v">78%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-caption">Ces données permettent d'adapter vos prérequis, votre page de vente et vos campagnes de collecte. Le profil apprenant s'enrichit automatiquement formation après formation.</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTIONS FORMATEURS IA -->
+<div class="sec-alt">
+  <div class="slbl">Outil n°3</div>
+  <div class="stitle">Questions formateurs — validées par IA en 2 secondes</div>
+  <div class="ssub">Ajoutez vos propres questions au formulaire d'avis. Chaque question est analysée par l'IA avant publication : biais de formulation, conformité RGPD, redondance avec le profil ReviewWall. Et les réponses enrichissent silencieusement le profil de matching de vos apprenants.</div>
+
+  <div class="qia-block">
+    <div class="tool-header">
+      <div class="th-dots">
+        <div class="th-dot td-r"></div>
+        <div class="th-dot td-y"></div>
+        <div class="th-dot td-g"></div>
+      </div>
+      <div class="th-label">app.reviewwall.fr · Questions formateurs</div>
+    </div>
+    <div class="tool-body">
+      <div class="qia-intro">✦ Vos questions enrichissent le profil de matching de l'apprenant — sans jamais lui en demander plus. La réponse brute reste privée ; ce qu'elle révèle sur son profil devient universel.</div>
+
+      <div style="margin-bottom:10px">
+        <div class="qia-label">Question soumise par le formateur</div>
+        <div class="qia-input-area">"Cette formation était-elle adaptée à votre niveau ?"</div>
+      </div>
+      <div class="qia-status qia-warn">⚠ Attention · Formulation orientée positivement</div>
+      <div class="qia-sug"><strong>Suggestion de reformulation automatique :</strong>"Le niveau de cette formation par rapport à vous, c'était ?" — Options : Trop simple / Bien calibré / Challengeant / Trop difficile</div>
+
+      <div style="margin:14px 0 6px">
+        <div class="qia-label" style="margin-bottom:6px">Deuxième question</div>
+        <div class="qia-input-area">"Quel est votre secteur d'activité ?"</div>
+      </div>
+      <div class="qia-status qia-ok">✓ Valide · Enrichit le profil apprenant · Non redondante</div>
+
+      <div class="qia-types">
+        <div class="qia-type">
+          <div class="qia-type-badge qt-pub">Publique</div>
+          <div class="qia-type-title">Visible sur l'avis</div>
+          <div class="qia-type-desc">Enrichit le profil + badge affiché sur l'avis public. Starter : 1 (bibliothèque), Pro : 3 (custom).</div>
+        </div>
+        <div class="qia-type">
+          <div class="qia-type-badge qt-priv">Privée feedback</div>
+          <div class="qia-type-title">Dashboard uniquement</div>
+          <div class="qia-type-desc">Vos questions de satisfaction. Remplace votre Google Form. Starter : 3, Pro : 7, Scale : illimitées.</div>
+        </div>
+        <div class="qia-type">
+          <div class="qia-type-badge qt-qual">Qualiopi</div>
+          <div class="qia-type-title">Templates conformes</div>
+          <div class="qia-type-desc">Collecte structurée pour l'indicateur 2 (résultats). Taux d'abandon calculé automatiquement. Pro uniquement.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGRÉGATEUR -->
+<div class="sec-alt">
+  <div class="slbl">Double valeur</div>
+  <div class="stitle">Chaque avis travaille deux fois pour vous</div>
+  <div class="agg-card">
+    <div class="agg-badge">Exclusif ReviewWall</div>
+    <div class="agg-title">Widget sur votre site + référencement sur notre catalogue</div>
+    <div class="agg-desc">En collectant des avis avec ReviewWall, vous alimentez automatiquement votre fiche sur reviewwall.fr — notre catalogue de formations profilées. Les apprenants qui cherchent une formation trouvent les vôtres, lisent vos avis, et cliquent vers vous. Plus vous avez d'avis profilés, meilleure est votre position dans le catalogue.</div>
+    <div class="flow">
+      <div class="flow-step"><strong>Vous collectez</strong>un avis profilé</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step"><strong>Fiche enrichie</strong>sur reviewwall.fr</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step"><strong>Apprenant qualifié</strong>vous trouve</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-step"><strong>Lead qualifié</strong>vers votre page</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIF CONCURRENTS -->
+<div class="sec-alt">
+  <div class="slbl">Comparatif</div>
+  <div class="stitle">ReviewWall face aux alternatives du marché</div>
+  <div class="ssub">Les outils existants ne sont pas pensés pour la spécificité de la formation en ligne. Voici ce qui distingue ReviewWall — et ce qui manque ailleurs.</div>
+
+  <div class="cmp-wrap">
+    <div class="cmp-scroll">
+      <div class="cmp-table">
+        <!-- HEADER -->
+        <div class="cmp-head">Critère</div>
+        <div class="cmp-head">Google Form<span class="cmp-head-sub">DIY</span></div>
+        <div class="cmp-head">Trustpilot<span class="cmp-head-sub">Avis génériques</span></div>
+        <div class="cmp-head">Satisfyy<span class="cmp-head-sub">Avis formation</span></div>
+        <div class="cmp-head">Digiforma<span class="cmp-head-sub">Gestion OF</span></div>
+        <div class="cmp-head"><span class="cmp-head-tag">✦ Recommandé</span>ReviewWall<span class="cmp-head-sub">La solution dédiée</span></div>
+
+        <!-- LIGNE 1 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Avis sur la formation, pas sur l'organisme</div>
+          <div class="cmp-cell"><span class="cmp-no">—</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>Notation entité</small></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>Partiel</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Cœur du modèle</small></div>
+        </div>
+
+        <!-- LIGNE 2 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Profil apprenant déclaré sous chaque avis</div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>35 dimensions</small></div>
+        </div>
+
+        <!-- LIGNE 3 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Conformité Qualiopi indicateur 2</div>
+          <div class="cmp-cell"><span class="cmp-no">—</span><small>À construire</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>Selon plan</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Module dédié</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Inclus (Pro)</small></div>
+        </div>
+
+        <!-- LIGNE 4 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Widget de matching dynamique par visiteur</div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>Widget statique</small></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>Widget statique</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Unique sur le marché</small></div>
+        </div>
+
+        <!-- LIGNE 5 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Catalogue agrégateur générateur de leads</div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>Pas formation</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>Outil interne</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>reviewwall.fr</small></div>
+        </div>
+
+        <!-- LIGNE 6 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Anti-fraude renforcé (avis profilé difficile à falsifier)</div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>Avis achetables</small></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Token unique + IA</small></div>
+        </div>
+
+        <!-- LIGNE 7 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Spécialisation formation en ligne francophone</div>
+          <div class="cmp-cell"><span class="cmp-no">—</span></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>Généraliste</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>OF français</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>100% formation</small></div>
+        </div>
+
+        <!-- LIGNE 8 -->
+        <div class="cmp-row">
+          <div class="cmp-cell">Modèle économique accessible aux indépendants</div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Gratuit mais limité</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>~99 €+/mois</small></div>
+          <div class="cmp-cell"><span class="cmp-half">~</span><small>49-149 €/mois</small></div>
+          <div class="cmp-cell"><span class="cmp-no">✕</span><small>59-119 €/mois</small></div>
+          <div class="cmp-cell"><span class="cmp-yes">✓</span><small>Freemium + Starter</small></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="cmp-foot">Le constat est simple : aucun outil existant ne combine avis profilés, widget intelligent, conformité Qualiopi et catalogue générateur de leads. ReviewWall n'est ni un Trustpilot bis ni un Digiforma — c'est une catégorie pensée pour la spécificité de la formation en ligne.</div>
+  </div>
+  <div class="cmp-hint">Positionnement marché vérifié au moment du lancement — mai 2026.</div>
+</div>
+
+<!-- PLANS -->
+<div class="sec">
+  <div class="slbl">L'offre</div>
+  <div class="stitle">Quatre plans, une seule logique : la valeur d'abord</div>
+
+  <div class="plans-intro-note">
+    <span class="plans-intro-note-icon">✦</span>
+    <div><strong>Tarification en cours d'arbitrage</strong> avec les 10 premiers formateurs partenaires. Les beta-testeurs gardent un accès Pro offert pendant 18 mois, et leur feedback détermine la grille finale. Aucun prix n'est figé tant que le produit n'est pas validé sur le terrain.</div>
+  </div>
+
+  <div class="plans">
+    <div class="plan">
+      <div class="pbadge pb-f">Gratuit</div>
+      <div class="plan-name">Freemium</div>
+      <div class="plan-desc">Pour découvrir sans engagement</div>
+      <div class="pi"><span class="pi-ok">✓</span>1 formation</div>
+      <div class="pi"><span class="pi-ok">✓</span>Widget basique</div>
+      <div class="pi"><span class="pi-ok">✓</span>Fiche catalogue</div>
+      <div class="pi"><span class="pi-no">✕</span>Questions privées</div>
+      <div class="pi"><span class="pi-no">✕</span>Questions publiques</div>
+      <div class="pi"><span class="pi-no">✕</span>Collecte Qualiopi</div>
+    </div>
+    <div class="plan">
+      <div class="pbadge pb-st">Starter</div>
+      <div class="plan-name">Starter</div>
+      <div class="plan-desc">Formateurs indépendants</div>
+      <div class="pi"><span class="pi-ok">✓</span>Formations illimitées</div>
+      <div class="pi"><span class="pi-ok">✓</span>1 question publique (bibliothèque)</div>
+      <div class="pi"><span class="pi-ok">✓</span>3 questions privées</div>
+      <div class="pi"><span class="pi-ok">✓</span>Analytics basiques</div>
+      <div class="pi"><span class="pi-ok">✓</span>Badges détaillés</div>
+      <div class="pi"><span class="pi-no">✕</span>Collecte Qualiopi</div>
+    </div>
+    <div class="plan plan-pro">
+      <div class="plan-pro-flag">★ Le plus complet</div>
+      <div class="pbadge pb-pr">Pro ✦</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-desc">OF certifiés Qualiopi</div>
+      <div class="pi"><span class="pi-ok">✓</span>Tout Starter</div>
+      <div class="pi"><span class="pi-star">★</span>3 questions publiques (custom + IA)</div>
+      <div class="pi"><span class="pi-star">★</span>7 questions privées</div>
+      <div class="pi"><span class="pi-star">★</span>Collecte Qualiopi (indicateur 2)</div>
+      <div class="pi"><span class="pi-star">★</span>Widget matching dynamique</div>
+      <div class="pi"><span class="pi-star">★</span>Badge Certifié ReviewWall</div>
+      <div class="pi"><span class="pi-star">★</span>Campagnes J+7 / J+30</div>
+      <div class="pi"><span class="pi-star">★</span>Analytics profilés avancés</div>
+    </div>
+    <div class="plan">
+      <div class="pbadge pb-sc">Scale</div>
+      <div class="plan-name">Scale</div>
+      <div class="plan-desc">Grands organismes</div>
+      <div class="pi"><span class="pi-ok">✓</span>Tout Pro</div>
+      <div class="pi"><span class="pi-ok">✓</span>Questions privées illimitées</div>
+      <div class="pi"><span class="pi-ok">✓</span>Export CSV segmenté</div>
+      <div class="pi"><span class="pi-ok">✓</span>API + webhooks</div>
+      <div class="pi"><span class="pi-ok">✓</span>Mode headless</div>
+      <div class="pi"><span class="pi-ok">✓</span>CSM dédié</div>
+    </div>
+  </div>
+  <div class="plans-note">→ Les beta-formateurs accèdent au plan Pro complet, offert pendant 18 mois</div>
+</div>
+
+<!-- BETA HONNÊTE -->
+<div class="sec-alt">
+  <div class="slbl">Accès anticipé · L'offre concrète</div>
+  <div class="stitle">Devenez l'un des 10 formateurs qui construisent ReviewWall</div>
+  <div class="beta-card">
+    <div class="beta-badge">Beta — places limitées</div>
+    <div class="beta-title">Plan Pro complet, offert 18 mois. Vous co-construisez le produit.</div>
+    <div class="beta-desc">Le produit est en développement actif. Plutôt que de figer une grille tarifaire dans le vide, nous construisons l'offre avec ceux qui vont l'utiliser. Les 10 premiers formateurs partenaires obtiennent un accès Pro offert sur 18 mois, et leur retour détermine la grille définitive.</div>
+    <div class="beta-avantages">
+      <div class="ba"><span class="ba-icon">✦</span>18 mois de plan Pro offerts (sans plafond)</div>
+      <div class="ba"><span class="ba-icon">✦</span>Tarif grandfathered à vie après la beta</div>
+      <div class="ba"><span class="ba-icon">✦</span>Accès prioritaire à toutes les nouvelles fonctionnalités</div>
+      <div class="ba"><span class="ba-icon">✦</span>Voix directe sur le développement produit</div>
+      <div class="ba"><span class="ba-icon">✦</span>Support direct du fondateur (Slack privé)</div>
+      <div class="ba"><span class="ba-icon">✦</span>Référencement prioritaire dans le catalogue</div>
+    </div>
+    <div class="beta-places">
+      <div class="bp-text">Places disponibles sur 10</div>
+      <div class="bp-count">7 places restantes</div>
+    </div>
+    <div class="beta-form">
+      <input class="beta-input" type="email" placeholder="votre@email.com">
+      <div class="beta-btn">Je candidate →</div>
+    </div>
+    <div class="beta-mention">Sans engagement · Sans carte bancaire · Réponse sous 24h · Entretien de 20 min ensuite</div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="sec">
+  <div class="slbl">Questions fréquentes</div>
+  <div class="stitle">On répond aux objections habituelles</div>
+  <div class="faq-item">
+    <div class="faq-q">Quelle différence avec Google Avis ou Trustpilot ?</div>
+    <div class="faq-a">Google et Trustpilot notent les entreprises. ReviewWall note les formations — chaque avis est attaché à une formation précise, pas à votre organisme. Et chaque avis affiche le profil déclaré de l'apprenant : secteur d'origine, niveau de départ, objectif visé.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Est-ce que ReviewWall couvre vraiment Qualiopi ?</div>
+    <div class="faq-a">Oui — le plan Pro inclut des templates de collecte conformes au référentiel Qualiopi, notamment pour documenter vos indicateurs de résultats (indicateur 2). Les données sont stockées dans votre dashboard, le taux d'abandon est calculé automatiquement, et tout est exportable pour vos audits.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Que se passe-t-il avec les réponses à mes questions privées ?</div>
+    <div class="faq-a">Vos questions privées vous appartiennent — les réponses brutes restent dans votre dashboard et ne sont jamais transmises à d'autres formateurs. Mais l'IA en extrait des signaux de profil (style d'apprentissage, niveau, contexte) qui enrichissent silencieusement le profil de matching de l'apprenant, sans que vous ni lui le perceviez explicitement.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">L'IA valide mes questions — concrètement ça fait quoi ?</div>
+    <div class="faq-a">En moins de 2 secondes, chaque question soumise est analysée sur 5 axes : biais de formulation (orientée positive ou négative), données sensibles RGPD, hors sujet formation, format non exploitable, redondance avec le profil ReviewWall existant. Si un problème est détecté, une reformulation vous est proposée automatiquement — vous n'êtes jamais bloqué, juste guidé.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Pourquoi aucun prix n'est affiché sur cette page ?</div>
+    <div class="faq-a">Parce que nous n'avons pas encore validé la grille définitive sur le terrain. La tarification se construit avec les 10 premiers formateurs partenaires — ils ont l'accès Pro offert pendant 18 mois, et leur retour détermine les prix. Les beta-formateurs bénéficient ensuite d'un tarif grandfathered à vie, quelle que soit la grille publique qui en sortira.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">En quoi ReviewWall est-il différent de Digiforma ou Satisfyy ?</div>
+    <div class="faq-a">Digiforma est un outil de gestion d'organisme de formation — il couvre Qualiopi, mais ne gère ni les avis profilés, ni le matching dynamique, ni le catalogue agrégateur. Satisfyy collecte des avis formation mais sans profil apprenant déclaré et sans canal d'acquisition. ReviewWall combine les trois axes que ces outils traitent séparément : conformité réglementaire + outil de conversion + générateur de leads.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Mes apprenants doivent-ils créer un compte pour laisser un avis ?</div>
+    <div class="faq-a">Non — ils reçoivent un lien unique par email et répondent en 2 minutes sans inscription. La création de compte est optionnelle et enrichit leur profil pour les prochains avis.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Combien de temps pour intégrer le widget ?</div>
+    <div class="faq-a">5 minutes — un snippet JS à copier-coller, compatible WordPress, Teachizy, Systeme.io, Learnybox et tout site custom.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Le produit existe déjà ?</div>
+    <div class="faq-a">ReviewWall est en développement actif. Les formateurs qui rejoignent la beta maintenant co-construisent le produit et obtiennent 18 mois de plan Pro offerts en échange de leur retour.</div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
