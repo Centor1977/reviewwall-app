@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 // profil est un Record<string, string> libre — la validation
 // des champs requis se fait manuellement dans goNext().
 const schema = z.object({
-  profil: z.record(z.string(), z.string()).default({}),
+  profil: z.record(z.string(), z.string()),
   note: z.number({ error: "Donnez une note" }).min(1).max(5),
   recommande: z.boolean({ error: "Répondez à cette question" }),
   avis_texte: z.string().min(50, "50 caractères minimum"),
@@ -107,7 +107,7 @@ export default function CollectForm({ token, offreId, vertical }: Props) {
     watch,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onTouched" });
+  } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onTouched", defaultValues: { profil: {} } });
 
   const avisTexte = watch("avis_texte") ?? "";
   const profilWatch = watch("profil") ?? {};
