@@ -29,6 +29,15 @@ export default async function DashboardLayout({
 
   if (!user) redirect(appConfig.auth.loginUrl);
 
+  // Admin accounts belong in the admin dashboard, not the prestataire layout.
+  // Check this before ensurePrestataire to avoid auto-creating a prestataire record.
+  const { data: adminRow } = await supabase
+    .from("admin_users")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (adminRow) redirect("/admin/dashboard");
+
   const prestataire = await ensurePrestataire(supabase, user.id);
   const vertical =
     VERTICALS[(prestataire?.vertical as Vertical) ?? DEFAULT_VERTICAL];

@@ -18,11 +18,22 @@ export async function GET(request: Request) {
       const user = data.user;
       const email = user.email!;
 
+      // ── Admin → redirige directement, sans créer de prestataire ──
+      const { data: adminRow } = await supabase
+        .from("admin_users")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (adminRow) {
+        return NextResponse.redirect(`${origin}/admin/dashboard`);
+      }
+
       // ── Création prestataire si absent (flow register classique) ──
       const { data: existingPrestataire } = await supabase
         .from("prestataires")
         .select("id")
         .eq("user_id", user.id)
+        .limit(1)
         .maybeSingle();
 
       if (!existingPrestataire) {

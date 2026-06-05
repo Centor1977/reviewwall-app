@@ -26,6 +26,7 @@ export async function ensurePrestataire(
     .from("prestataires")
     .select(SELECT)
     .eq("user_id", userId)
+    .limit(1)
     .maybeSingle();
 
   if (existing) return existing as Prestataire;
