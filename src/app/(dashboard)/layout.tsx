@@ -1,3 +1,4 @@
+import "@/styles/dashboard-dark.css";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -5,6 +6,9 @@ import { ensurePrestataire } from "@/lib/supabase/ensure-prestataire";
 import { appConfig } from "@/config/app";
 import { VERTICALS, DEFAULT_VERTICAL, type Vertical } from "@/config/verticals";
 import { SidebarNav } from "@/components/SidebarNav";
+import { getUserRoles } from "@/lib/roles";
+import { RoleSwitcher } from "@/components/ui/RoleSwitcher";
+import { DarkModeApplier } from "@/components/dashboard/DarkModeApplier";
 
 async function signOut() {
   "use server";
@@ -28,11 +32,16 @@ export default async function DashboardLayout({
   const prestataire = await ensurePrestataire(supabase, user.id);
   const vertical =
     VERTICALS[(prestataire?.vertical as Vertical) ?? DEFAULT_VERTICAL];
+  const { isApprenant } = await getUserRoles(supabase, user.id);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="dashboard-dark flex h-screen overflow-hidden bg-slate-50">
+      <DarkModeApplier />
+
       {/* ── Sidebar ── */}
-      <aside className="flex h-full w-60 shrink-0 flex-col border-r border-slate-200 bg-white">
+      <aside
+        className="sidebar-item flex h-full w-60 shrink-0 flex-col border-r border-slate-200"
+      >
         {/* Logo */}
         <div className="flex h-14 shrink-0 items-center border-b border-slate-200 px-5">
           <Link
@@ -56,6 +65,7 @@ export default async function DashboardLayout({
               <p className="truncate text-sm font-medium text-slate-900">
                 {prestataire?.nom ?? user.email}
               </p>
+              {isApprenant && <RoleSwitcher currentRole="prestataire" />}
               <form action={signOut}>
                 <button
                   type="submit"

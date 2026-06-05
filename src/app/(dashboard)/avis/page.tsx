@@ -123,6 +123,22 @@ export default async function AvisPage({
   const avis = (avisRows ?? []) as unknown as AvisRow[];
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
+  // Réponses aux questions pour les avis affichés
+  type ReponseRow = { id: string; avis_id: string; reponse_texte: string | null; reponse_note: number | null; reponse_booleen: boolean | null; reponse_choix: string[] | null; question: { texte: string; visibilite_defaut: string } | null };
+  const avisIds = avis.map((a) => a.id);
+  const { data: reponsesRaw } = avisIds.length > 0
+    ? await supabase
+        .from("question_reponses")
+        .select("id, avis_id, reponse_texte, reponse_note, reponse_booleen, reponse_choix, question:questions_bibliotheque(texte, visibilite_defaut)")
+        .in("avis_id", avisIds)
+    : { data: [] as ReponseRow[] };
+
+  const reponsesByAvis = (reponsesRaw ?? []).reduce<Record<string, ReponseRow[]>>((acc, r) => {
+    if (!acc[r.avis_id]) acc[r.avis_id] = [];
+    acc[r.avis_id].push(r as ReponseRow);
+    return acc;
+  }, {});
+
   // Pagination URL helper
   function pageUrl(p: number) {
     const params = new URLSearchParams();
@@ -193,7 +209,7 @@ export default async function AvisPage({
           {/* Avis list */}
           <div className="space-y-4">
             {avis.map((a) => (
-              <AvisCard key={a.id} a={a} vertical={vertical} />
+              <AvisCard key={a.id} a={a} vertical={vertical} reponses={reponsesByAvis[a.id] ?? []} />
             ))}
           </div>
 
@@ -263,12 +279,16 @@ function StatCard({
 
 // ── AvisCard ──────────────────────────────────────────────────────────────
 
+type ReponseRow = { id: string; avis_id: string; reponse_texte: string | null; reponse_note: number | null; reponse_booleen: boolean | null; reponse_choix: string[] | null; question: { texte: string; visibilite_defaut: string } | null };
+
 function AvisCard({
   a,
   vertical,
+  reponses,
 }: {
   a: AvisRow;
   vertical: (typeof VERTICALS)[keyof typeof VERTICALS];
+  reponses: ReponseRow[];
 }) {
   const date = new Intl.DateTimeFormat("fr-FR", {
     day: "numeric",
@@ -367,6 +387,41 @@ function AvisCard({
       <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-500">
         {a.badge === "invite" ? "Avis invité" : (a.badge ?? "—")}
       </span>
+
+      {/* Accordéon réponses */}
+      {reponses.length > 0 && (
+        <details className="mt-3 border-t border-slate-100 pt-3">
+          <summary className="cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 select-none">
+            Réponses aux questions ({reponses.length})
+          </summary>
+          <div className="mt-2 space-y-3">
+            {["publique", "privee"].map((vis) => {
+              const group = reponses.filter((r) => r.question?.visibilite_defaut === vis);
+              if (!group.length) return null;
+              return (
+                <div key={vis}>
+                  <p className="mb-1 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                    {vis === "publique" ? "Questions publiques" : "🔒 Questions privées"}
+                  </p>
+                  <div className="space-y-1">
+                    {group.map((r) => {
+                      const rep = r.reponse_texte ?? r.reponse_choix?.join(", ")
+                        ?? (r.reponse_booleen != null ? (r.reponse_booleen ? "Oui" : "Non") : null)
+                        ?? (r.reponse_note != null ? `${r.reponse_note}/5` : "—");
+                      return (
+                        <div key={r.id} className="flex gap-2 text-xs text-slate-600">
+                          <span className="shrink-0 text-slate-400">›</span>
+                          <span>{r.question?.texte} <span className="font-medium text-slate-800">→ {rep}</span></span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </details>
+      )}
     </div>
   );
 }

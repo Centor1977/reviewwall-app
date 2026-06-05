@@ -1,25 +1,20 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { revalidatePath } from "next/cache";
-import { nanoid } from "nanoid";
 import { createClient } from "@/lib/supabase/server";
 import { ensurePrestataire } from "@/lib/supabase/ensure-prestataire";
 import { VERTICALS, DEFAULT_VERTICAL, type Vertical } from "@/config/verticals";
 import { appConfig } from "@/config/app";
-import { cn } from "@/lib/utils";
-import { ArrowLeft, Link2, CheckCircle2, Clock, ExternalLink } from "lucide-react";
-import { CopyButton } from "./CopyButton";
-import { QrCodeToken } from "./QrCodeToken";
+import { OffreHeader } from "@/components/offres/OffreHeader";
+import { BlocFiche } from "@/components/offres/BlocFiche";
+import { BlocSeances } from "@/components/offres/BlocSeances";
+import { BlocAvis } from "@/components/offres/BlocAvis";
+import { BlocQuestions } from "@/components/offres/BlocQuestions";
+import { BlocDiffusion } from "@/components/offres/BlocDiffusion";
+import { calculateCompletion } from "@/lib/offres/completion";
+import type { QuestionItem } from "./questionsActions";
+import type { SeancePreview } from "@/components/offres/BlocSeances";
+import type { AvisPreview } from "@/components/offres/BlocAvis";
 
 type Params = { id: string };
-
-type Token = {
-  id: string;
-  token: string;
-  email_client: string | null;
-  used: boolean;
-  created_at: string;
-};
 
 export default async function OffreDetailPage({
   params,
@@ -32,193 +27,121 @@ export default async function OffreDetailPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   const prestataire = await ensurePrestataire(supabase, user!.id);
   if (!prestataire) notFound();
 
   const { data: offre } = await supabase
     .from("offres")
-    .select("*")
+    .select(
+      "id, titre, categorie, active, slug, image_url, niveau, format, duree, prix, catalogue_visible, catalogue_force, metadata_vertical, description_courte, description_longue, tags"
+    )
     .eq("id", id)
     .eq("prestataire_id", prestataire.id)
     .maybeSingle();
 
   if (!offre) notFound();
 
-  const { data: tokens } = await supabase
-    .from("collecte_tokens")
-    .select("id, token, email_client, used, created_at")
-    .eq("offre_id", id)
-    .order("created_at", { ascending: false });
+  const [{ data: seancesRaw }, { data: allAvisRaw }, { data: offreQuestionsRaw }] =
+    await Promise.all([
+      supabase
+        .from("seances")
+        .select(
+          "id, titre, mode, statut, nb_participants_attendus, participants(statut_avis)"
+        )
+        .eq("offre_id", id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("avis")
+        .select("id, note, recommande, avis_texte, profil, created_at")
+        .eq("offre_id", id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("offre_questions")
+        .select(
+          "id, ordre, visibilite, question:questions_bibliotheque(id, texte, type_reponse, options, visibilite_defaut, dimension_profil, utilisable_matching, validee, validation_ia)"
+        )
+        .eq("offre_id", id)
+        .order("ordre", { ascending: true }),
+    ]);
 
-  const tokenList = (tokens ?? []) as Token[];
+  const seances = (seancesRaw ?? []) as unknown as SeancePreview[];
+  const allAvis = (allAvisRaw ?? []) as unknown as (AvisPreview & {
+    recommande: boolean | null;
+  })[];
+  const allQuestions = (offreQuestionsRaw ?? []) as unknown as QuestionItem[];
 
-  const vertical = VERTICALS[(prestataire.vertical as Vertical) ?? DEFAULT_VERTICAL];
-  const clientLabel = vertical.client.singular;
+  // Complétion fiche
+  const completion = calculateCompletion(offre);
 
-  async function generateToken() {
-    "use server";
-    const supabase = await createClient();
-    const token = nanoid(12);
-    await supabase.from("collecte_tokens").insert({ token, offre_id: id });
-    revalidatePath(`/offres/${id}`);
-  }
+  // Stats agrégées
+  const nbAvis = allAvis.length;
+  const noteMoyenne =
+    nbAvis > 0 ? allAvis.reduce((s, a) => s + (a.note ?? 0), 0) / nbAvis : null;
+  const pourcentRecommande =
+    nbAvis > 0
+      ? Math.round((allAvis.filter((a) => a.recommande).length / nbAvis) * 100)
+      : null;
+  const oneWeekAgo = new Date(Date.now() - 7 * 86400000).toISOString();
+  const deltaAvisSemaine = allAvis.filter((a) => a.created_at > oneWeekAgo).length;
+  const nbParticipants = seances.reduce((s, se) => s + se.participants.length, 0);
+  const nbAvisReçus = seances.reduce(
+    (s, se) => s + se.participants.filter((p) => p.statut_avis === "soumis").length,
+    0
+  );
+  const tauxReponse =
+    nbParticipants > 0 ? Math.round((nbAvisReçus / nbParticipants) * 100) : null;
 
+  const verticalKey = (prestataire.vertical as Vertical) ?? DEFAULT_VERTICAL;
   const publicUrl = `${appConfig.url}/f/${offre.slug}`;
   const widgetUrl = `${appConfig.url}/widget/${offre.slug}`;
   const iframeCode = `<iframe\n  src="${widgetUrl}"\n  width="100%"\n  height="500"\n  frameborder="0"\n  style="border:none;"\n  loading="lazy"\n></iframe>`;
 
   return (
-    <div className="max-w-2xl">
-      {/* Retour */}
-      <Link
-        href="/offres"
-        className="mb-6 flex items-center gap-1.5 text-sm text-gray-500 transition hover:text-gray-900"
-      >
-        <ArrowLeft size={15} />
-        Retour aux {vertical.offre.plural}
-      </Link>
+    <div className="max-w-5xl">
+      <OffreHeader
+        offre={{
+          id: offre.id,
+          titre: offre.titre,
+          categorie: offre.categorie ?? null,
+          image_url: offre.image_url ?? null,
+          niveau: offre.niveau ?? null,
+          format: offre.format ?? null,
+          duree: offre.duree ?? null,
+          prix: (offre as Record<string, unknown>).prix as string | null ?? null,
+          metadata_vertical:
+            (offre.metadata_vertical as Record<string, unknown> | null) ?? null,
+        }}
+        completionScore={completion.score}
+        stats={{
+          noteMoyenne,
+          nbAvis,
+          deltaAvisSemaine,
+          pourcentRecommande,
+          nbSeances: seances.length,
+          nbParticipants,
+          tauxReponse,
+        }}
+        publicUrl={publicUrl}
+      />
 
-      {/* Infos offre */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-gray-900">{offre.titre}</h1>
-              <span
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-xs font-medium",
-                  offre.active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-                )}
-              >
-                {offre.active ? "Actif" : "Inactif"}
-              </span>
-            </div>
-            {offre.categorie && (
-              <p className="mt-1 text-sm text-gray-500">{offre.categorie}</p>
-            )}
-          </div>
+      <BlocFiche completion={completion} offreId={id} />
 
-          <div className="flex shrink-0 items-center gap-2">
-            <CopyButton text={publicUrl} />
-            <a
-              href={publicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
-            >
-              <ExternalLink size={13} />
-              Fiche publique
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
-          <code className="min-w-0 flex-1 truncate text-xs text-gray-500">{publicUrl}</code>
-        </div>
-
-        {offre.description && (
-          <p className="mt-4 text-sm text-gray-600">{offre.description}</p>
-        )}
-
-        {offre.url_externe && (
-          <a
-            href={offre.url_externe}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
-          >
-            <Link2 size={14} />
-            {offre.url_externe}
-          </a>
-        )}
-      </div>
-
-      {/* Liens de collecte */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="font-semibold text-gray-900">Liens de collecte</h2>
-            <p className="mt-0.5 text-xs text-gray-400">
-              Chaque lien est à usage unique — un lien par {clientLabel}.
-            </p>
-          </div>
-          <form action={generateToken}>
-            <button
-              type="submit"
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-blue-700"
-            >
-              <Link2 size={13} />
-              Générer un lien
-            </button>
-          </form>
-        </div>
-
-        {tokenList.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-400">
-            Aucun lien généré. Cliquez sur &quot;Générer un lien&quot; pour créer le premier.
-          </p>
-        ) : (
-          <ul className="divide-y divide-gray-100">
-            {tokenList.map((t) => {
-              const collectUrl = `${appConfig.url}/collect/${t.token}`;
-              return (
-                <li key={t.id} className="flex items-center gap-4 py-4">
-                  <QrCodeToken url={collectUrl} token={t.token} />
-                  <div className="min-w-0 flex-1">
-                    <code className="block truncate rounded bg-gray-50 px-2 py-1 text-xs text-gray-600 font-mono">
-                      {collectUrl}
-                    </code>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
-                      {t.used ? (
-                        <>
-                          <CheckCircle2 size={11} className="text-green-500" />
-                          <span className="text-green-600">Utilisé</span>
-                        </>
-                      ) : (
-                        <>
-                          <Clock size={11} />
-                          <span>En attente</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <CopyButton text={collectUrl} />
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-
-      {/* Intégrer le widget */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <h2 className="font-semibold text-gray-900">Intégrer le widget</h2>
-        <p className="mt-0.5 text-xs text-gray-400">
-          Affichez vos avis directement sur votre site.
-        </p>
-
-        <div className="mt-4">
-          <div className="mb-1.5 flex items-center justify-between">
-            <p className="text-xs font-medium text-gray-700">Option A — Iframe (recommandé)</p>
-            <CopyButton text={iframeCode} />
-          </div>
-          <pre className="overflow-x-auto rounded-lg bg-gray-50 p-3 text-xs leading-relaxed text-gray-600">
-            {iframeCode}
-          </pre>
-        </div>
-
-        <div className="mt-4">
-          <div className="mb-1.5 flex items-center justify-between">
-            <p className="text-xs font-medium text-gray-400">Option B — Snippet JS</p>
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-400">
-              Bientôt disponible
-            </span>
-          </div>
-          <pre className="overflow-x-auto rounded-lg bg-gray-50 p-3 text-xs leading-relaxed text-gray-300 select-none">
-            {"// Snippet JS — bientôt disponible"}
-          </pre>
-        </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <BlocSeances offreId={id} seances={seances} />
+        <BlocAvis offreId={id} avis={allAvis.slice(0, 3)} />
+        <BlocQuestions
+          offreId={id}
+          verticalKey={verticalKey}
+          questions={allQuestions}
+        />
+        <BlocDiffusion
+          offreId={id}
+          offreSlug={offre.slug}
+          publicUrl={publicUrl}
+          catalogueVisible={offre.catalogue_visible ?? false}
+          catalogueForce={offre.catalogue_force ?? false}
+          iframeCode={iframeCode}
+        />
       </div>
     </div>
   );

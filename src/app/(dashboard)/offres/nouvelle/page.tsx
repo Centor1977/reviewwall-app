@@ -13,10 +13,11 @@ export default async function NouvellePage() {
   const prestataire = await ensurePrestataire(supabase, user!.id);
   if (!prestataire) notFound();
 
-  const vertical = VERTICALS[(prestataire.vertical as Vertical) ?? DEFAULT_VERTICAL];
+  const verticalKey = (prestataire.vertical as Vertical) ?? DEFAULT_VERTICAL;
+  const vertical = VERTICALS[verticalKey];
 
   return (
-    <div className="max-w-xl">
+    <div className="max-w-2xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">
           Nouvelle {vertical.offre.singular}
@@ -27,7 +28,7 @@ export default async function NouvellePage() {
       </div>
 
       <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <NouvelleOffreForm prestataireId={prestataire.id} vertical={vertical} />
+        <NouvelleOffreForm prestataireId={prestataire.id} verticalKey={verticalKey} vertical={vertical} />
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import { appConfig } from "@/config/app";
 import { cn, slugify } from "@/lib/utils";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { sendWelcomeEmail } from "./actions";
 
 const schema = z.object({
   nom: z.string().min(2, "Nom requis (2 caractères minimum)"),
@@ -45,6 +46,7 @@ export default function RegisterPage() {
       email: data.email,
       password: data.password,
       options: {
+        emailRedirectTo: `${window.location.origin}${appConfig.auth.callbackUrl}`,
         data: { nom: data.nom, organisme: data.organisme ?? null },
       },
     });
@@ -59,6 +61,13 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!authData.user.identities || authData.user.identities.length === 0) {
+      setError("email", {
+        message: "Un compte existe déjà avec cette adresse. Connectez-vous ou réinitialisez votre mot de passe.",
+      });
+      return;
+    }
+
     if (authData.session) {
       const { error: insertError } = await supabase
         .from("prestataires")
@@ -67,6 +76,7 @@ export default function RegisterPage() {
           nom: data.nom,
           slug: slugify(data.nom),
           organisme: data.organisme ?? null,
+          email: data.email,
         });
 
       if (insertError) {
@@ -77,6 +87,7 @@ export default function RegisterPage() {
         return;
       }
 
+      sendWelcomeEmail(data.email, data.nom).catch(console.error);
       router.push(appConfig.auth.afterLoginUrl);
       router.refresh();
     } else {

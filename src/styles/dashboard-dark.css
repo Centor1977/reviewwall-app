@@ -1,0 +1,173 @@
+/*
+ * Dashboard Formateur — Thème sombre (fixe, sans toggle)
+ *
+ * Stratégie : .dashboard-dark posé sur le wrapper racine du layout.
+ * Les custom properties héritent vers tous les enfants, basculant les
+ * tokens Tailwind v4 (--color-*) en dark sans toucher les composants.
+ */
+
+/* ── Tokens dash — fallback clair (seuls survivants) ───────── */
+:root {
+  --dash-bg-sidebar: #ffffff;
+  --dash-bg-stats:   #ffffff;
+}
+
+/* ── Thème sombre ─────────────────────────────────────────── */
+.dashboard-dark {
+  color-scheme: dark;
+
+  --dash-bg-sidebar: #0d0d0d;
+  --dash-bg-stats:   #111111;
+
+  /* ── Tokens sémantiques ─────────────────────────────────── */
+  --color-background-primary:   #1e1e1e;
+  --color-background-secondary: #252525;
+  --color-background-tertiary:  #111111;
+  --color-border-primary:       rgba(255, 255, 255, 0.10);
+  --color-border-secondary:     rgba(255, 255, 255, 0.07);
+  --color-text-primary:         #f1f5f9;
+  --color-text-secondary:       #94a3b8;
+
+  /* ── Override tokens Tailwind v4 (--color-palette-shade) ──
+   * .bg-white → var(--color-white), etc. → héritage via DOM.
+   * ──────────────────────────────────────────────────────── */
+
+  /* Fonds neutres */
+  --color-white:     #30302E;   /* cards principales */
+  --color-slate-50:  #141414;   /* fond de page */
+  --color-slate-100: #2e2e2e;   /* fonds secondaires / hover */
+  --color-gray-50:   #141414;
+  --color-gray-100:  #2e2e2e;
+
+  /* Bordures & dividers */
+  --color-slate-200: rgba(255, 255, 255, 0.10);
+  --color-slate-300: rgba(255, 255, 255, 0.12);
+  --color-gray-200:  rgba(255, 255, 255, 0.10);
+  --color-gray-300:  rgba(255, 255, 255, 0.12);
+
+  /* Textes — inversés pour lisibilité sur fond sombre */
+  --color-slate-900: #f1f5f9;
+  --color-slate-800: #e2e8f0;
+  --color-slate-700: #cbd5e1;
+  --color-slate-600: #94a3b8;
+  --color-slate-500: #CAC8BF;   /* aligné sur slate-400 — texte secondaire uniforme */
+  --color-slate-400: #CAC8BF;
+  --color-gray-900:  #f1f5f9;
+  --color-gray-700:  #cbd5e1;
+  --color-gray-600:  #94a3b8;
+  --color-gray-500:  #CAC8BF;   /* aligné sur slate-400 */
+  --color-gray-400:  #CAC8BF;   /* aligné sur slate-400 */
+
+  /* Bleu accent */
+  --color-blue-50:  rgba(37, 99, 235, 0.12);
+  --color-blue-100: rgba(37, 99, 235, 0.18);
+  --color-blue-600: #89A9D7;
+  --color-blue-700: #7aa2f7;
+
+  /* Vert */
+  --color-green-50:  rgba(22, 163, 74, 0.12);
+  --color-green-100: rgba(22, 163, 74, 0.18);
+  --color-green-700: #73d397;
+
+  /* Amber */
+  --color-amber-50:  rgba(217, 119, 6, 0.12);
+  --color-amber-100: rgba(217, 119, 6, 0.18);
+  --color-amber-700: #e5a94a;
+
+  /* Rouge */
+  --color-red-50:  rgba(220, 38, 38, 0.12);
+  --color-red-100: rgba(220, 38, 38, 0.18);
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #fca5a5;
+
+  /* Violet */
+  --color-violet-50:  rgba(124, 58, 237, 0.12);
+  --color-violet-700: #c4b5fd;
+
+  /* Émeraude */
+  --color-emerald-50:  rgba(16, 185, 129, 0.12);
+  --color-emerald-700: #6ee7b7;
+
+  /* Rose */
+  --color-rose-50:  rgba(244, 63, 94, 0.12);
+  --color-rose-700: #fda4af;
+}
+
+/* ── Inputs natifs ─────────────────────────────────────────── */
+.dashboard-dark input,
+.dashboard-dark textarea,
+.dashboard-dark select {
+  background-color: #161616;
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+}
+
+.dashboard-dark input::placeholder,
+.dashboard-dark textarea::placeholder {
+  color: var(--color-slate-400);
+}
+
+/* ── Barre stats ───────────────────────────────────────────── */
+.dashboard-dark .stats-bar {
+  background-color: var(--dash-bg-stats);
+  border-top: 1px solid var(--color-border-primary);
+}
+
+.dashboard-dark .stat-cell:not(:last-child) {
+  border-right: 1px solid var(--color-border-primary);
+}
+
+/* ── Sidebar navigation ────────────────────────────────────── */
+.dashboard-dark .sidebar-item {
+  background-color: var(--dash-bg-sidebar);
+}
+
+.dashboard-dark .sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.dashboard-dark .sidebar-item-active {
+  background-color: rgba(37, 99, 235, 0.12);
+  color: #7aa2f7;
+  border-left: 2px solid #2563eb;
+  padding-left: 10px;
+}
+
+/* ── Titres de sections dans les cards ─────────────────────── */
+.dashboard-dark .card-section-title {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Scrollbar (Chromium) ──────────────────────────────────── */
+.dashboard-dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dashboard-dark ::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+.dashboard-dark ::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+.dashboard-dark ::-webkit-scrollbar-thumb:hover {
+  background: #383838;
+}
+
+/* ── Correctif text-white (--color-white redéfini pour les fonds cards) ── */
+
+/* Icônes et textes dans la zone cover (fond dégradé bleu) */
+.dashboard-dark .group.overflow-hidden .text-white {
+  color: #ffffff;
+}
+
+/* Boutons à fond bleu (Nouvelle séance, etc.) */
+.dashboard-dark .bg-blue-600.text-white,
+.dashboard-dark .bg-blue-600 .text-white,
+.dashboard-dark .hover\:bg-blue-700:hover.text-white {
+  color: #ffffff;
+}

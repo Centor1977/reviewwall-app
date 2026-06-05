@@ -3,6 +3,7 @@ import { ensurePrestataire } from "@/lib/supabase/ensure-prestataire";
 import { VERTICALS, DEFAULT_VERTICAL, type Vertical } from "@/config/verticals";
 import { ProfileForm } from "./ProfileForm";
 import { DangerZone } from "./DangerZone";
+import { TemplatesSection } from "./TemplatesSection";
 
 export default async function ParametresPage() {
   const supabase = await createClient();
@@ -13,6 +14,14 @@ export default async function ParametresPage() {
   const prestataire = await ensurePrestataire(supabase, user!.id);
   const vertical =
     VERTICALS[(prestataire?.vertical as Vertical) ?? DEFAULT_VERTICAL];
+
+  const { data: templates } = prestataire
+    ? await supabase
+        .from("message_templates")
+        .select("id, nom, objet, corps, created_at")
+        .eq("prestataire_id", prestataire.id)
+        .order("created_at", { ascending: false })
+    : { data: [] };
 
   return (
     <div className="max-w-2xl">
@@ -61,6 +70,9 @@ export default async function ParametresPage() {
             disponibles.
           </p>
         </div>
+
+        {/* Templates de messages */}
+        <TemplatesSection templates={templates ?? []} />
 
         {/* Danger zone (client) */}
         <DangerZone />

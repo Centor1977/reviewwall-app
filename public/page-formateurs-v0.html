@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReviewWall - Pour les formateurs</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a18;background:white;font-size:14px;line-height:1.6}
+.wrap{max-width:780px;margin:0 auto;padding:0 2rem}
+
+/* NAV */
+nav{padding:1.25rem 0;border-bottom:0.5px solid #E8E6DF;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:15px;font-weight:500}.logo span{color:#7F77DD}
+.nav-cta{background:#1a1a18;color:white;font-size:12px;font-weight:500;padding:6px 14px;border-radius:7px;cursor:pointer;text-decoration:none}
+
+/* HERO */
+.hero{padding:2rem 0 1.5rem}
+.hero-tag{display:inline-block;font-size:11px;font-weight:500;color:#7F77DD;background:#EEEDFE;padding:3px 10px;border-radius:20px;margin-bottom:.75rem;letter-spacing:.02em}
+h1{font-size:38px;font-weight:500;line-height:1.2;margin-bottom:.75rem;letter-spacing:-.02em;max-width:600px}
+h1 span{color:#7F77DD}
+.hero-sub{font-size:16px;color:#5F5E5A;line-height:1.7;max-width:520px;margin-bottom:1.25rem}
+.hero-sub strong{color:#1a1a18;font-weight:500}
+.cta-primary{display:inline-block;background:#1a1a18;color:white;font-size:13px;font-weight:500;padding:9px 20px;border-radius:8px;cursor:pointer;text-decoration:none}
+.cta-note{display:block;font-size:12px;color:#B4B2A9;margin-top:4px;margin-bottom:0}
+
+/* SÉPARATEUR */
+hr{border:none;border-top:0.5px solid #F1EFE8;margin:1.25rem 0}
+
+/* CE QUE C'EST */
+.what-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#B4B2A9;margin-bottom:1rem}
+.points-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.point{display:flex;gap:12px;padding:1rem;border-bottom:0.5px solid #F1EFE8;align-items:flex-start}
+.point:nth-child(odd){border-right:0.5px solid #F1EFE8}
+.point:nth-last-child(-n+2){border-bottom:none}
+.point-icon{flex-shrink:0;margin-top:2px}
+.point-title{font-size:16px;font-weight:600;color:#1a1a18;margin-bottom:4px}
+.point-desc{font-size:13px;color:#5F5E5A;line-height:1.6}
+
+/* BETA */
+.beta{background:#1a1a18;border-radius:14px;padding:2.5rem;margin:2rem 0}
+.beta-tag{display:inline-block;font-size:11px;font-weight:600;color:white;background:#7F77DD;padding:3px 10px;border-radius:20px;margin-bottom:1rem}
+.beta h2{font-size:22px;font-weight:500;color:white;margin-bottom:.5rem;line-height:1.3;max-width:480px}
+.beta-sub{font-size:13px;color:#888780;line-height:1.65;margin-bottom:1.5rem;max-width:480px}
+.beta-body{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.avantages{margin-bottom:0}
+.av{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#D3D1C7;margin-bottom:8px;line-height:1.45}
+.av-dot{color:#7F77DD;flex-shrink:0;font-size:16px;line-height:1;margin-top:1px}
+.beta-right{}
+.places{background:#2C2C2A;border-radius:8px;padding:10px 14px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.places-lbl{font-size:12px;color:#888780}
+.places-val{font-size:13px;font-weight:600;color:#AFA9EC}
+.form{display:flex;gap:8px;margin-bottom:8px}
+.form input{flex:1;background:#2C2C2A;border:0.5px solid #3C3C3A;border-radius:8px;padding:11px 13px;font-size:13px;color:white;outline:none}
+.form input::placeholder{color:#5F5E5A}
+.form input:focus{border-color:#7F77DD}
+.form-btn{background:#7F77DD;color:white;font-size:13px;font-weight:600;padding:11px 18px;border-radius:8px;white-space:nowrap;cursor:pointer;flex-shrink:0}
+.form-note{font-size:11px;color:#3C3C3A}
+
+/* FONDATEUR */
+.founder{padding:1.5rem 0;border-top:0.5px solid #F1EFE8}
+.founder-inner{display:flex;gap:14px;align-items:flex-start;max-width:600px}
+.founder-avatar{width:36px;height:36px;border-radius:50%;background:#1a1a18;color:white;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.founder-name{font-size:12px;font-weight:600;color:#1a1a18}
+.founder-role{font-size:11px;color:#B4B2A9;margin-bottom:6px}
+.founder-quote{font-size:13px;color:#5F5E5A;line-height:1.65;font-style:italic;border-left:2px solid #EEEDFE;padding-left:10px}
+
+/* FAQ */
+.faq{padding:1.5rem 0;border-top:0.5px solid #F1EFE8}
+.faq-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#B4B2A9;margin-bottom:1.25rem}
+.faq-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+.faq-item{}
+.faq-q{font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:4px}
+.faq-a{font-size:13px;color:#5F5E5A;line-height:1.65}
+
+/* FOOTER */
+footer{padding:1.5rem 0;border-top:0.5px solid #F1EFE8;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footer-logo{font-size:13px;font-weight:500}.footer-logo span{color:#7F77DD}
+footer a{font-size:11px;color:#B4B2A9;text-decoration:none}
+.footer-links{display:flex;gap:14px;flex-wrap:wrap}
+
+@media(max-width:620px){
+  .wrap{padding:0 1.25rem}
+  h1{font-size:26px}
+  .hero{padding:1.5rem 0 1rem}
+  .points-grid{grid-template-columns:1fr}
+  .point{border-right:none !important}
+  .point:nth-last-child(-n+2){border-bottom:0.5px solid #F1EFE8}
+  .point:last-child{border-bottom:none}
+  .beta{padding:1.5rem}
+  .beta-body{grid-template-columns:1fr}
+  .form{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="logo">Review<span>Wall</span></div>
+  <a class="nav-cta" href="#">Rejoindre la beta</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Pour les formateurs et organismes de formation</div>
+  <h1>La preuve sociale qui convertit -<br><span>vos formations le méritent</span></h1>
+  <p class="hero-sub">ReviewWall collecte des avis profilés sur vos formations - <strong>secteur d'origine, niveau de départ, objectif déclaré.</strong> Vos futurs apprenants lisent des retours de gens qui leur ressemblent.</p>
+  <a class="cta-primary" href="#">Rejoindre la beta gratuite →</a>
+  <span class="cta-note">Sans carte bancaire · 7 places restantes sur 10</span>
+</div>
+
+<hr>
+
+<!-- CE QUE C'EST -->
+<div class="what-label">Ce que vous obtenez</div>
+<div class="points-grid">
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#EEEDFE"/>
+      <circle cx="20" cy="16" r="5" fill="#7F77DD"/>
+      <rect x="11" y="24" width="18" height="2.5" rx="1.25" fill="#AFA9EC"/>
+      <rect x="13" y="28.5" width="14" height="2.5" rx="1.25" fill="#AFA9EC"/>
+      <circle cx="28" cy="26" r="5" fill="#3C3489"/>
+      <path d="M26 26h4M28 24v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Avis profilés</div>
+    <div class="point-desc">Chaque avis affiche le profil de son auteur. Vos prospects lisent des retours de gens qui leur ressemblent.</div>
+  </div>
+</div>
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#EEEDFE"/>
+      <rect x="9" y="12" width="22" height="14" rx="3" fill="#7F77DD"/>
+      <rect x="12" y="15" width="16" height="8" rx="1.5" fill="white" opacity="0.9"/>
+      <rect x="14" y="17" width="6" height="1.5" rx="0.75" fill="#7F77DD"/>
+      <rect x="14" y="20" width="9" height="1.5" rx="0.75" fill="#AFA9EC"/>
+      <rect x="17" y="26" width="6" height="2" rx="1" fill="#3C3489"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Widget intelligent</div>
+    <div class="point-desc">Remonte automatiquement sur votre site les avis les plus pertinents pour chaque visiteur.</div>
+  </div>
+</div>
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#E1F5EE"/>
+      <rect x="10" y="10" width="20" height="14" rx="3" fill="#1D9E75"/>
+      <rect x="13" y="13.5" width="9" height="1.5" rx="0.75" fill="white" opacity="0.8"/>
+      <rect x="13" y="16.5" width="6" height="1.5" rx="0.75" fill="white" opacity="0.5"/>
+      <path d="M26 17.5L30 17.5" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M29 15.5L31 17.5L29 19.5" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="10" y="27" width="20" height="5" rx="2.5" fill="#9FE1CB"/>
+      <rect x="13" y="28.75" width="8" height="1.5" rx="0.75" fill="#085041"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Collecte automatique</div>
+    <div class="point-desc">Importez vos apprenants par CSV. Relances automatiques. QR code / liens web pour vos sessions en présentiel ou à distance.</div>
+  </div>
+</div>
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#EEEDFE"/>
+      <rect x="10" y="10" width="20" height="20" rx="3" fill="#7F77DD"/>
+      <rect x="13" y="14" width="14" height="2" rx="1" fill="white" opacity="0.9"/>
+      <rect x="13" y="18" width="10" height="2" rx="1" fill="white" opacity="0.6"/>
+      <rect x="13" y="22" width="12" height="2" rx="1" fill="white" opacity="0.6"/>
+      <circle cx="29" cy="27" r="6" fill="#3C3489"/>
+      <path d="M27 27l1.5 1.5L31 25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Questions validées par l'IA</div>
+    <div class="point-desc">Ajoutez vos questions de satisfaction. L'IA détecte les biais et problèmes RGPD avant publication. Remplace votre Google Form.</div>
+  </div>
+</div>
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#E1F5EE"/>
+      <rect x="10" y="24" width="20" height="7" rx="2" fill="#1D9E75"/>
+      <rect x="10" y="9" width="20" height="13" rx="2" fill="#9FE1CB"/>
+      <rect x="13" y="12" width="14" height="2" rx="1" fill="#085041"/>
+      <rect x="13" y="16" width="9" height="2" rx="1" fill="#0F6E56"/>
+      <path d="M24 27h4M26 25v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="13" y="27" width="8" height="1.5" rx="0.75" fill="white" opacity="0.7"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Qualiopi sans effort</div>
+    <div class="point-desc">Templates conformes pour l'indicateur 2, taux d'abandon calculé, export pour vos audits. Plan Pro.</div>
+  </div>
+</div>
+
+<div class="point">
+  <div class="point-icon">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#F1EFE8"/>
+      <circle cx="20" cy="20" r="10" fill="white" stroke="#D3D1C7" stroke-width="1"/>
+      <path d="M20 10C15 10 11 14 11 20" stroke="#4285F4" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 10C25 10 29 14 29 20" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/>
+      <path d="M11 20C11 26 15 30 20 30" stroke="#FBBC04" stroke-width="2" stroke-linecap="round"/>
+      <path d="M29 20C29 26 25 30 20 30" stroke="#34A853" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="4" fill="#4285F4"/>
+      <path d="M19 20l1.5 1.5L23 18" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div>
+    <div class="point-title">Boost Google inclus</div>
+    <div class="point-desc">Après son avis ReviewWall, votre apprenant peut le partager sur Google Maps en 30 secondes - texte copié automatiquement.</div>
+  </div>
+</div>
+
+</div>
+
+<!-- BETA -->
+<div class="beta">
+  <div class="beta-tag">Beta - 7 places restantes sur 10</div>
+  <h2>Co-construisez ReviewWall - 18 mois de plan Pro offerts</h2>
+  <p class="beta-sub">Le produit est opérationnel. Plutôt que de figer des prix sans retour terrain, nous construisons l'offre avec les 10 premiers formateurs partenaires.</p>
+
+  <div class="beta-body">
+    <div class="avantages">
+      <div class="av"><span class="av-dot">✦</span>18 mois de plan Pro offerts (valeur indicative 702 €)</div>
+      <div class="av"><span class="av-dot">✦</span>Tarif préférentiel garanti à l'issue de la beta</div>
+      <div class="av"><span class="av-dot">✦</span>Voix directe sur le développement produit</div>
+    </div>
+    <div class="beta-right">
+      <div class="places">
+        <span class="places-lbl">Places disponibles sur 10</span>
+        <span class="places-val">7 restantes</span>
+      </div>
+      <div class="form">
+        <input type="email" placeholder="votre@email.com">
+        <div class="form-btn">Je candidate →</div>
+      </div>
+      <div class="form-note">Sans engagement · Sans carte bancaire · Réponse sous 24h</div>
+    </div>
+  </div>
+</div>
+
+<!-- FONDATEUR -->
+<div class="founder">
+  <div class="founder-inner">
+    <div class="founder-avatar">D</div>
+    <div>
+      <div class="founder-name">David - Fondateur ReviewWall</div>
+      <div class="founder-role">Développeur indépendant · Hauts-de-France</div>
+      <div class="founder-quote">"Je construis ReviewWall pour les formateurs qui perdent des inscrits face au manque d'avis vérifiés sur leurs formations. Parce qu'il est très difficile de savoir si une formation est adaptée à soi - malgré les commentaires. Un avis sans profil ne répond pas à la vraie question de l'apprenant : est-ce que ça marche pour quelqu'un comme moi ?"</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <div class="faq-label">Questions fréquentes</div>
+  <div class="faq-grid">
+
+  <div class="faq-item">
+    <div class="faq-q">Quelle différence avec Google Avis ?</div>
+    <div class="faq-a">Google note les entreprises. ReviewWall note les formations - chaque avis est attaché à une formation précise et affiche le profil déclaré de l'apprenant : secteur, niveau de départ, objectif.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Et si je reçois un avis négatif ?</div>
+    <div class="faq-a">Vous ne pouvez pas le supprimer - et c'est ce qui rend vos avis positifs crédibles. Chaque avis est lu avec le profil de l'apprenant. Vous avez un droit de réponse publique illimité. C'est la norme de Booking, Amazon, Tripadvisor.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">En combien de temps j'ai mes premiers avis ?</div>
+    <div class="faq-a">Dès votre première session terminée - vous importez votre liste d'apprenants, ils reçoivent un lien unique par email et répondent en 2 minutes sans inscription.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Combien de temps pour intégrer le widget ?</div>
+    <div class="faq-a">5 minutes - un snippet JS à copier-coller, compatible avec votre site et la plupart des LMS du marché.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Est-ce que ReviewWall couvre Qualiopi ?</div>
+    <div class="faq-a">Oui - le plan Pro inclut des templates conformes pour l'indicateur 2 (résultats). Taux d'abandon calculé automatiquement, tout est exportable pour vos audits.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">J'utilise déjà Digiforma ou Satisfyy - c'est différent ?</div>
+    <div class="faq-a">Oui. Digiforma gère votre organisme, pas vos avis. Satisfyy collecte des avis, mais sans profil apprenant ni canal d'acquisition. ReviewWall fait les deux - avis profilés et fiche catalogue - et s'utilise en complément de votre outil de gestion existant.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Le produit existe déjà ?</div>
+    <div class="faq-a">Oui - ReviewWall est opérationnel sur la plupart des fonctionnalités présentées sur cette page. Les formateurs qui rejoignent la beta maintenant co-construisent les derniers arbitrages et obtiennent 18 mois de plan Pro offerts en échange de leur retour.</div>
+  </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Review<span>Wall</span></div>
+  <div class="footer-links">
+    <a href="#">Mentions légales</a>
+    <a href="#">CGU</a>
+    <a href="#">Confidentialité</a>
+    <a href="#">support@reviewwall.fr</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

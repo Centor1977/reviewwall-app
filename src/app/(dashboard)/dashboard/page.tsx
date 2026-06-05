@@ -5,6 +5,8 @@ import { ensurePrestataire } from "@/lib/supabase/ensure-prestataire";
 import { appConfig } from "@/config/app";
 import { VERTICALS, DEFAULT_VERTICAL, type Vertical } from "@/config/verticals";
 import { BookOpen, Star, TrendingUp, Plus } from "lucide-react";
+import { GuideDemarrage } from "@/components/dashboard/GuideDemarrage";
+import { getGuideProgress } from "@/lib/dashboard/guide-progress";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -53,6 +55,9 @@ export default async function DashboardPage() {
     }
   }
 
+  const premierOffreId = (offres ?? [])[0]?.id ?? null;
+  const guideProgress = await getGuideProgress(prestataire.id);
+
   const today = new Intl.DateTimeFormat("fr-FR", {
     weekday: "long",
     day: "numeric",
@@ -87,6 +92,11 @@ export default async function DashboardPage() {
           label="Note moyenne"
           value={noteMoyenne !== null ? `${noteMoyenne.toFixed(1)} / 5` : "—"}
         />
+      </div>
+
+      {/* Guide de démarrage */}
+      <div className="mb-8">
+        <GuideDemarrage progress={guideProgress} premierOffreId={premierOffreId} />
       </div>
 
       {/* Empty state */}

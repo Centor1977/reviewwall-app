@@ -31,10 +31,10 @@ export function SidebarNav({ offreLabel }: Props) {
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
+              "sidebar-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
               isActive
-                ? "bg-blue-50 text-blue-700"
-                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                ? "sidebar-item-active bg-blue-50 text-blue-700"
+                : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
             )}
           >
             <Icon size={16} className="shrink-0" />

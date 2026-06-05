@@ -1,9 +1,28 @@
 import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
 import { appConfig } from "@/config/app";
-import { Star, BarChart3, Link2 } from "lucide-react";
+import { Star, BarChart3, Link2, BookOpen } from "lucide-react";
 
-export default function HomePage() {
+async function getTopOffres() {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { auth: { persistSession: false, autoRefreshToken: false } }
+    );
+    const { data: offres } = await supabase
+      .from("offres")
+      .select("id, titre, slug, description_courte, image_url")
+      .eq("catalogue_visible", true)
+      .eq("active", true)
+      .limit(3);
+    return offres ?? [];
+  } catch { return []; }
+}
+
+export default async function HomePage() {
   const name = appConfig.name;
+  const topOffres = await getTopOffres();
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans">
@@ -12,6 +31,12 @@ export default function HomePage() {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <span className="text-base font-semibold text-slate-900">{name}</span>
           <div className="flex items-center gap-3">
+            <Link
+              href="/catalogue"
+              className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
+            >
+              Catalogue
+            </Link>
             <Link
               href="/formateurs"
               className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
@@ -95,6 +120,45 @@ export default function HomePage() {
           ))}
         </div>
       </main>
+
+      {/* Catalogue section */}
+      {topOffres.length > 0 && (
+        <section className="border-t border-slate-100 bg-slate-50 px-6 py-16">
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900">Parcourir le catalogue</h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Des formations évaluées par de vrais apprenants
+                </p>
+              </div>
+              <Link href="/catalogue"
+                className="text-sm font-medium text-blue-600 hover:underline transition">
+                Voir tout le catalogue →
+              </Link>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {topOffres.map((o) => (
+                <Link key={o.id} href={`/f/${o.slug}`}
+                  className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:shadow-md">
+                  {o.image_url ? (
+                    <img src={o.image_url} alt={o.titre}
+                      className="aspect-video w-full rounded-lg object-cover" />
+                  ) : (
+                    <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-slate-100">
+                      <BookOpen size={24} className="text-slate-300" />
+                    </div>
+                  )}
+                  <p className="font-medium text-slate-900 line-clamp-2">{o.titre}</p>
+                  {o.description_courte && (
+                    <p className="text-xs text-slate-400 line-clamp-2">{o.description_courte}</p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-100 py-6 text-center text-xs text-slate-400">
