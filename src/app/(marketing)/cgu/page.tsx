@@ -29,7 +29,7 @@ export default function CguPage() {
           Conditions Générales d&apos;Utilisation
         </h1>
         <p className="mb-8 text-sm text-slate-400">
-          ReviewWall — Version 1.0 — [DATE À COMPLÉTER]
+          ReviewWall — Version 1.0 — 08 juin 2026
         </p>
 
         {/* Navigation interne */}
@@ -64,9 +64,9 @@ export default function CguPage() {
               et de trouver des offres adaptées à leur situation.
             </p>
             <p className="mt-3 text-sm">
-              La Plateforme est éditée par [RAISON SOCIALE À COMPLÉTER], [FORME JURIDIQUE],
-              au capital de [MONTANT], immatriculée au RCS de [VILLE] sous le numéro
-              [NUMÉRO], dont le siège social est situé au [ADRESSE] (ci-après « l&apos;Éditeur »).
+              La Plateforme est éditée par RUB CONSEIL, SAS,
+              au capital de 2000€, immatriculée au RCS de LILLE METROPOLE sous le numéro
+              792 792 053 0001, dont le siège social est situé au 19 Rue Ducourouble 59000 Lille (ci-après « l&apos;Éditeur »).
             </p>
             <p className="mt-3 text-sm">
               Les présentes Conditions Générales d&apos;Utilisation (ci-après « CGU ») régissent
@@ -92,7 +92,7 @@ export default function CguPage() {
             <p className="mb-3 text-sm">Au sens des présentes CGU, les termes suivants désignent :</p>
             <dl className="space-y-3 text-sm">
               {[
-                ["Plateforme", "Le site ReviewWall accessible à l'adresse [DOMAINE À COMPLÉTER] et ses éventuelles applications mobiles."],
+                ["Plateforme", "Le site ReviewWall accessible à l'adresse reviewwall.fr et ses éventuelles applications mobiles."],
                 ["Prestataire", "Toute personne physique ou morale utilisant la Plateforme pour collecter des avis sur ses offres (formateur, organisme de formation, coach, prestataire de services)."],
                 ["Utilisateur / Client", "Toute personne physique accédant à la Plateforme pour consulter des avis, déposer un avis ou gérer son espace personnel."],
                 ["Offre", "Toute formation, prestation, accompagnement ou service référencé par un Prestataire sur la Plateforme."],
@@ -143,7 +143,7 @@ export default function CguPage() {
               L&apos;utilisateur est responsable de la confidentialité de ses identifiants. Toute
               utilisation de la Plateforme depuis son compte est réputée effectuée par
               l&apos;utilisateur lui-même. En cas de compromission, l&apos;utilisateur doit informer
-              immédiatement l&apos;Éditeur à [EMAIL SUPPORT À COMPLÉTER].
+              immédiatement l&apos;Éditeur à support%@%reviewwall%.%.fr.
             </Subsection>
           </section>
 
@@ -497,15 +497,14 @@ export default function CguPage() {
             </Subsection>
             <Subsection title="12.4 Contact">
               <ul className="space-y-1">
-                <li>Pour toute question relative aux présentes CGU : [EMAIL CONTACT À COMPLÉTER]</li>
-                <li>Pour toute question relative aux données personnelles : [EMAIL DPO À COMPLÉTER]</li>
+                <li>Pour toute question relative aux présentes CGU : support%@%reviewwall%.%.fr</li>
+                <li>Pour toute question relative aux données personnelles : support%@%reviewwall%.%.fr</li>
               </ul>
             </Subsection>
           </section>
 
           <p className="border-t border-slate-200 pt-6 text-xs text-slate-400">
-            ReviewWall — Conditions Générales d&apos;Utilisation — Version beta — À mettre à jour avant lancement public
-          </p>
+            ReviewWall — Conditions Générales d&apos;Utilisation - Version beta</p>
         </div>
       </div>
 

@@ -10,6 +10,8 @@ import type { OffreCatalogue } from "@/app/api/catalogue/route";
 
 export const revalidate = 3600;
 
+const CATALOGUE_PUBLIC = process.env.CATALOGUE_PUBLIC === "true";
+
 const PAGE_SIZE = 12;
 
 const NIVEAU_LABELS: Record<string, string> = {
@@ -24,6 +26,12 @@ const FORMAT_LABELS: Record<string, string> = {
 // ── Metadata ───────────────────────────────────────────────────
 
 export async function generateMetadata(): Promise<Metadata> {
+  if (!CATALOGUE_PUBLIC) {
+    return {
+      title: `Catalogue — ${appConfig.name}`,
+      robots: { index: false, follow: false },
+    };
+  }
   const title = `Catalogue formations — ${appConfig.name}`;
   const description = `Découvrez des formations évaluées par de vrais apprenants sur ${appConfig.name}. Avis profilés et vérifiés.`;
   return {
@@ -271,6 +279,52 @@ function Pagination({ page, total_pages, sp }: {
   );
 }
 
+// ── Page temporaire (CATALOGUE_PUBLIC !== "true") ──────────────
+
+function CatalogueTemporaire() {
+  return (
+    <div className="flex min-h-screen flex-col bg-white">
+      <header className="border-b border-slate-200">
+        <div className="mx-auto flex h-14 max-w-3xl items-center px-6">
+          <Link href="/" className="text-base font-semibold text-slate-900">
+            {appConfig.name}
+          </Link>
+        </div>
+      </header>
+
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center px-6 py-24">
+        <h1 className="text-4xl font-bold tracking-tight text-slate-900">
+          Les avis profilés arrivent.
+        </h1>
+        <p className="mt-6 text-lg leading-relaxed text-slate-600">
+          ReviewWall affiche uniquement des avis vérifiés, rattachés à un profil réel d&rsquo;apprenant.
+          <br />Pas de note gonflée. Pas de témoignage vague.
+        </p>
+        <p className="mt-4 text-lg text-slate-600">
+          Le catalogue ouvre quand les données le méritent.
+        </p>
+
+        <div className="mt-14 border-t border-slate-100 pt-10">
+          <h2 className="text-xl font-semibold text-slate-900">Formateur&nbsp;?</h2>
+          <p className="mt-2 text-slate-600">
+            Collectez vos premiers avis maintenant - votre fiche sera prête et mise en avant dès l&rsquo;ouverture.
+          </p>
+          <Link
+            href="/formateurs"
+            className="mt-6 inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          >
+            Devenir formateur fondateur →
+          </Link>
+        </div>
+      </main>
+
+      <footer className="border-t border-slate-100 py-6 text-center text-xs text-slate-400">
+        {appConfig.name}
+      </footer>
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────
 
 export default async function CataloguePage({
@@ -278,6 +332,8 @@ export default async function CataloguePage({
 }: {
   searchParams: Promise<Record<string, string>>;
 }) {
+  if (!CATALOGUE_PUBLIC) return <CatalogueTemporaire />;
+
   const sp = await searchParams;
   const q    = sp.q ?? "";
   const page = Math.max(1, parseInt(sp.page ?? "1", 10));

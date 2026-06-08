@@ -28,7 +28,7 @@ export default function ConfidentialitePage() {
           Politique de Confidentialité
         </h1>
         <p className="mb-8 text-sm text-slate-400">
-          ReviewWall — Version 1.0 — [DATE À COMPLÉTER]
+          ReviewWall — Version 1.0 — 08 juin 2026
         </p>
 
         {/* Navigation interne */}
@@ -62,9 +62,9 @@ export default function ConfidentialitePage() {
               utilisons et quels sont vos droits.
             </p>
             <p className="mt-3 text-sm">
-              La Plateforme est éditée par [RAISON SOCIALE À COMPLÉTER], dont le siège
-              social est situé au [ADRESSE À COMPLÉTER]. Pour toute question relative à vos
-              données personnelles, vous pouvez nous contacter à : [EMAIL DPO À COMPLÉTER].
+              La Plateforme est éditée par RUB CONSEIL, dont le siège
+              social est situé au 19 rue ducourouble 59000 Lille. Pour toute question relative à vos
+              données personnelles, vous pouvez nous contacter à : support%@%reviewwall%.%.fr.
             </p>
             <p className="mt-3 text-sm">
               Les données sont hébergées dans l&apos;Union Européenne, sur des serveurs situés
@@ -305,7 +305,7 @@ export default function ConfidentialitePage() {
             <Subsection title="6.1 Droit d'accès">
               Vous pouvez obtenir une copie de l&apos;ensemble de vos données personnelles
               traitées par la Plateforme. Cette copie est disponible en format JSON depuis
-              votre espace personnel ou sur demande à [EMAIL DPO À COMPLÉTER].
+              votre espace personnel ou sur demande à EMAIL DPOsupport%@%reviewwall%.%.fr.
             </Subsection>
             <Subsection title="6.2 Droit de rectification">
               Vous pouvez corriger vos données inexactes ou incomplètes depuis votre espace
@@ -337,7 +337,7 @@ export default function ConfidentialitePage() {
               nous contactant.
             </Subsection>
             <Subsection title="6.7 Exercice de vos droits">
-              Pour exercer vos droits, contactez-nous à : [EMAIL DPO À COMPLÉTER]. Nous
+              Pour exercer vos droits, contactez-nous à : support%@%reviewwall%.%.fr. Nous
               répondons dans un délai maximum d&apos;un mois. En cas de réponse insatisfaisante,
               vous pouvez introduire une réclamation auprès de la CNIL (
               <a
@@ -447,7 +447,7 @@ export default function ConfidentialitePage() {
               notification sur la Plateforme avec un préavis de 30 jours.
             </p>
             <p className="mt-3 text-sm">
-              La version en vigueur est toujours accessible à l&apos;adresse [DOMAINE]/confidentialite.
+              La version en vigueur est toujours accessible à l&apos;adresse reviewwall.fr/confidentialite.
             </p>
           </section>
 
@@ -461,9 +461,9 @@ export default function ConfidentialitePage() {
               l&apos;exercice de vos droits :
             </p>
             <ul className="mt-2 space-y-1 text-sm">
-              <li>Email : [EMAIL DPO À COMPLÉTER]</li>
+              <li>Email : support%@%reviewwall%.%.fr</li>
               <li>
-                Courrier : [RAISON SOCIALE] — [ADRESSE] — À l&apos;attention du responsable des
+                Courrier : RUB CONSEIL - 19 rue ducourouble 59000 Lille - À l&apos;attention du responsable des
                 données personnelles
               </li>
             </ul>
@@ -489,8 +489,7 @@ export default function ConfidentialitePage() {
           </section>
 
           <p className="border-t border-slate-200 pt-6 text-xs text-slate-400">
-            ReviewWall — Politique de Confidentialité — Version beta — À mettre à jour avant lancement public
-          </p>
+            ReviewWall — Politique de Confidentialité — Version beta </p>
         </div>
       </div>
 

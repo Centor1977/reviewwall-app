@@ -53,27 +53,27 @@ export default function MentionsLegalesPage() {
             <dl className="space-y-2 text-sm">
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">Raison sociale</dt>
-                <dd>[RAISON SOCIALE À COMPLÉTER]</dd>
+                <dd>RUB CONSEIL</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">Forme juridique</dt>
-                <dd>[FORME JURIDIQUE À COMPLÉTER]</dd>
+                <dd>SAS</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">SIRET</dt>
-                <dd>[SIRET À COMPLÉTER]</dd>
+                <dd>792 792 053 0001</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">Siège social</dt>
-                <dd>[ADRESSE À COMPLÉTER]</dd>
+                <dd>Rue Ducourouble 59000 Lille</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">Directeur de publication</dt>
-                <dd>[NOM À COMPLÉTER]</dd>
+                <dd>Souchot David</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-44 shrink-0 font-medium text-slate-600">Email de contact</dt>
-                <dd>[EMAIL À COMPLÉTER]</dd>
+                <dd>support%@%reviewwall%.%fr</dd>
               </div>
             </dl>
           </section>
@@ -91,9 +91,6 @@ export default function MentionsLegalesPage() {
                   Vercel Inc.<br />
                   340 Pine Street, Suite 701<br />
                   San Francisco, CA 94104, États-Unis<br />
-                  <a href="https://vercel.com" className="text-blue-600 hover:underline">
-                    vercel.com
-                  </a>
                 </p>
               </div>
               <div className="rounded-lg border border-slate-200 p-4">
@@ -102,9 +99,6 @@ export default function MentionsLegalesPage() {
                   Supabase Inc.<br />
                   970 Toa Payoh North, Singapour<br />
                   Données hébergées à Frankfurt, Allemagne (Union Européenne)<br />
-                  <a href="https://supabase.com" className="text-blue-600 hover:underline">
-                    supabase.com
-                  </a>
                 </p>
               </div>
             </div>
@@ -116,9 +110,9 @@ export default function MentionsLegalesPage() {
               Propriété intellectuelle
             </h2>
             <p className="text-sm">
-              L&apos;ensemble des éléments constituant le site ReviewWall — code source,
-              design, marques, logos, algorithmes, textes et contenus éditoriaux —
-              est la propriété exclusive de [RAISON SOCIALE À COMPLÉTER] et est
+              L&apos;ensemble des éléments constituant le site ReviewWall, code source,
+              design, marques, logos, algorithmes, textes et contenus éditoriaux,
+              est la propriété exclusive de RUB CONSEIL et est
               protégé par les lois françaises et internationales relatives à la
               propriété intellectuelle.
             </p>
@@ -171,7 +165,7 @@ export default function MentionsLegalesPage() {
               </a>
               . Conformément au Règlement Général sur la Protection des Données (RGPD),
               vous disposez de droits sur vos données personnelles, exercables à
-              l&apos;adresse : [EMAIL DPO À COMPLÉTER].
+              l&apos;adresse : support%@%reviewwall%.%.fr.
             </p>
           </section>
 
@@ -184,10 +178,10 @@ export default function MentionsLegalesPage() {
             </p>
             <ul className="mt-2 space-y-1 text-sm">
               <li>
-                Email : [EMAIL À COMPLÉTER]
+                Email : support%@%reviewwall%.%.fr
               </li>
               <li>
-                Courrier : [RAISON SOCIALE] — [ADRESSE COMPLÈTE]
+                Courrier : RUB CONSEIL - 19 rue ducourouble 5900 Lille
               </li>
             </ul>
           </section>

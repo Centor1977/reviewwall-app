@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { appConfig } from "@/config/app";
 import { Star, BarChart3, Link2, BookOpen } from "lucide-react";
 
+const CATALOGUE_PUBLIC = process.env.CATALOGUE_PUBLIC === "true";
+
 async function getTopOffres() {
   try {
     const supabase = createClient(
@@ -31,12 +33,14 @@ export default async function HomePage() {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <span className="text-base font-semibold text-slate-900">{name}</span>
           <div className="flex items-center gap-3">
-            <Link
-              href="/catalogue"
-              className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              Catalogue
-            </Link>
+            {CATALOGUE_PUBLIC && (
+              <Link
+                href="/catalogue"
+                className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
+              >
+                Catalogue
+              </Link>
+            )}
             <Link
               href="/formateurs"
               className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
@@ -122,7 +126,7 @@ export default async function HomePage() {
       </main>
 
       {/* Catalogue section */}
-      {topOffres.length > 0 && (
+      {CATALOGUE_PUBLIC && topOffres.length > 0 && (
         <section className="border-t border-slate-100 bg-slate-50 px-6 py-16">
           <div className="mx-auto max-w-4xl">
             <div className="mb-8 flex items-center justify-between">

@@ -108,17 +108,19 @@ export default function FormateursPage() {
           <div className="point">
             <div className="point-icon">
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="10" fill="#EEEDFE"/>
-                <rect x="9" y="12" width="22" height="14" rx="3" fill="#7F77DD"/>
-                <rect x="12" y="15" width="16" height="8" rx="1.5" fill="white" opacity="0.9"/>
-                <rect x="14" y="17" width="6" height="1.5" rx="0.75" fill="#7F77DD"/>
-                <rect x="14" y="20" width="9" height="1.5" rx="0.75" fill="#AFA9EC"/>
-                <rect x="17" y="26" width="6" height="2" rx="1" fill="#3C3489"/>
+                <rect width="40" height="40" rx="10" fill="#F1EFE8"/>
+                <circle cx="20" cy="20" r="10" fill="white" stroke="#D3D1C7" strokeWidth="1"/>
+                <path d="M20 10C15 10 11 14 11 20" stroke="#4285F4" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M20 10C25 10 29 14 29 20" stroke="#EA4335" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M11 20C11 26 15 30 20 30" stroke="#FBBC04" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M29 20C29 26 25 30 20 30" stroke="#34A853" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="20" cy="20" r="4" fill="#4285F4"/>
+                <path d="M19 20l1.5 1.5L23 18" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
             <div>
-              <div className="point-title">Widget intelligent</div>
-              <div className="point-desc">Remonte automatiquement sur votre site les avis les plus pertinents pour chaque visiteur.</div>
+              <div className="point-title">Boost Google inclus</div>
+              <div className="point-desc">Après son avis ReviewWall, votre apprenant peut le partager sur Google Maps en 30 secondes - texte copié automatiquement.</div>
             </div>
           </div>
 
@@ -180,19 +182,17 @@ export default function FormateursPage() {
           <div className="point">
             <div className="point-icon">
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="10" fill="#F1EFE8"/>
-                <circle cx="20" cy="20" r="10" fill="white" stroke="#D3D1C7" strokeWidth="1"/>
-                <path d="M20 10C15 10 11 14 11 20" stroke="#4285F4" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M20 10C25 10 29 14 29 20" stroke="#EA4335" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M11 20C11 26 15 30 20 30" stroke="#FBBC04" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M29 20C29 26 25 30 20 30" stroke="#34A853" strokeWidth="2" strokeLinecap="round"/>
-                <circle cx="20" cy="20" r="4" fill="#4285F4"/>
-                <path d="M19 20l1.5 1.5L23 18" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect width="40" height="40" rx="10" fill="#EEEDFE"/>
+                <rect x="9" y="12" width="22" height="14" rx="3" fill="#7F77DD"/>
+                <rect x="12" y="15" width="16" height="8" rx="1.5" fill="white" opacity="0.9"/>
+                <rect x="14" y="17" width="6" height="1.5" rx="0.75" fill="#7F77DD"/>
+                <rect x="14" y="20" width="9" height="1.5" rx="0.75" fill="#AFA9EC"/>
+                <rect x="17" y="26" width="6" height="2" rx="1" fill="#3C3489"/>
               </svg>
             </div>
             <div>
-              <div className="point-title">Boost Google inclus</div>
-              <div className="point-desc">Après son avis ReviewWall, votre apprenant peut le partager sur Google Maps en 30 secondes - texte copié automatiquement.</div>
+              <div className="point-title">Widget intelligent</div>
+              <div className="point-desc">Remonte automatiquement sur votre site les avis les plus pertinents pour chaque visiteur.</div>
             </div>
           </div>
 
