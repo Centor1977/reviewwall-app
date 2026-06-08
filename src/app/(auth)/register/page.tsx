@@ -104,7 +104,7 @@ function RegisterForm() {
       router.push(appConfig.auth.afterLoginUrl);
       router.refresh();
     } else {
-      router.push("/login?message=check-email");
+      router.push(`/login?message=check-email&email=${encodeURIComponent(data.email)}`);
     }
   }
 

@@ -11,7 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 import { appConfig } from "@/config/app";
 import { VERTICALS } from "@/config/verticals";
 import { cn } from "@/lib/utils";
-import { MailCheck, AlertCircle, Loader2 } from "lucide-react";
+import { MailCheck, AlertCircle, Loader2, RefreshCw } from "lucide-react";
 
 const schema = z.object({
   email: z.string().email("Adresse email invalide"),
@@ -36,7 +36,34 @@ function translateAuthError(error: AuthError): string {
   }
 }
 
-type Props = { message?: string; error?: string };
+const RESEND_MAX = 3;
+const RESEND_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+type ResendStatus = "idle" | "loading" | "sent" | "limit";
+
+function getResendCount(email: string): number {
+  try {
+    const raw = localStorage.getItem(`resend_confirm_${email}`);
+    if (!raw) return 0;
+    const { count, ts } = JSON.parse(raw) as { count: number; ts: number };
+    if (Date.now() - ts > RESEND_WINDOW_MS) return 0;
+    return count;
+  } catch {
+    return 0;
+  }
+}
+
+function incrementResendCount(email: string) {
+  try {
+    const count = getResendCount(email);
+    localStorage.setItem(
+      `resend_confirm_${email}`,
+      JSON.stringify({ count: count + 1, ts: Date.now() })
+    );
+  } catch {}
+}
+
+type Props = { message?: string; error?: string; email?: string };
 
 const inputCls = (hasError: boolean) =>
   cn(
@@ -44,18 +71,21 @@ const inputCls = (hasError: boolean) =>
     hasError ? "border-red-400 bg-red-50" : "border-slate-200"
   );
 
-export default function LoginForm({ message, error: errorParam }: Props) {
+export default function LoginForm({ message, error: errorParam, email: emailParam }: Props) {
   const router = useRouter();
   const [forgotMode, setForgotMode] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
   const [resetError, setResetError] = useState<string | null>(null);
+  const [authErrorCode, setAuthErrorCode] = useState<string | null>(null);
+  const [resendStatus, setResendStatus] = useState<ResendStatus>("idle");
 
   const {
     register,
     handleSubmit,
     setError,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
@@ -67,12 +97,27 @@ export default function LoginForm({ message, error: errorParam }: Props) {
     });
 
     if (error) {
+      setAuthErrorCode(error.code ?? null);
       setError("root", { message: translateAuthError(error) });
       return;
     }
 
+    setAuthErrorCode(null);
     router.push(appConfig.auth.afterLoginUrl);
     router.refresh();
+  }
+
+  async function onResend(email: string) {
+    const count = getResendCount(email);
+    if (count >= RESEND_MAX) {
+      setResendStatus("limit");
+      return;
+    }
+    setResendStatus("loading");
+    const supabase = createClient();
+    await supabase.auth.resend({ type: "signup", email });
+    incrementResendCount(email);
+    setResendStatus("sent");
   }
 
   async function onResetSubmit(e: React.FormEvent) {
@@ -162,10 +207,42 @@ export default function LoginForm({ message, error: errorParam }: Props) {
       {message === "check-email" && (
         <div className="mt-5 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3">
           <MailCheck size={17} className="mt-0.5 shrink-0 text-blue-500" />
-          <p className="text-sm text-blue-700">
-            Un email de confirmation a été envoyé. Cliquez sur le lien pour
-            activer votre compte.
-          </p>
+          <div className="flex-1">
+            <p className="text-sm text-blue-700">
+              Un email de confirmation a été envoyé
+              {emailParam ? <> à <strong>{emailParam}</strong></> : null}.
+              Cliquez sur le lien pour activer votre compte.
+            </p>
+            {emailParam && (
+              <div className="mt-2">
+                {resendStatus === "idle" && (
+                  <button
+                    type="button"
+                    onClick={() => onResend(emailParam)}
+                    className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    Vous ne l&apos;avez pas reçu ? Renvoyer l&apos;email
+                  </button>
+                )}
+                {resendStatus === "loading" && (
+                  <span className="flex items-center gap-1 text-xs text-blue-600">
+                    <Loader2 size={12} className="animate-spin" />Envoi en cours…
+                  </span>
+                )}
+                {resendStatus === "sent" && (
+                  <p className="text-xs text-blue-700 font-medium">Email renvoyé ! Vérifiez votre boîte mail.</p>
+                )}
+                {resendStatus === "limit" && (
+                  <p className="text-xs text-blue-700">
+                    Limite de renvoi atteinte. Contactez{" "}
+                    <a href={`mailto:${appConfig.supportEmail}`} className="font-medium underline">
+                      {appConfig.supportEmail}
+                    </a>
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -234,7 +311,38 @@ export default function LoginForm({ message, error: errorParam }: Props) {
         {errors.root && (
           <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
             <AlertCircle size={16} className="mt-0.5 shrink-0 text-red-500" />
-            <p className="text-sm text-red-700">{errors.root.message}</p>
+            <div className="flex-1">
+              <p className="text-sm text-red-700">{errors.root.message}</p>
+              {authErrorCode === "email_not_confirmed" && (
+                <div className="mt-2">
+                  {resendStatus === "idle" && (
+                    <button
+                      type="button"
+                      onClick={() => onResend(getValues("email"))}
+                      className="flex items-center gap-1 text-xs font-medium text-red-600 hover:text-red-800 hover:underline"
+                    >
+                      <RefreshCw size={11} />Renvoyer l&apos;email de confirmation
+                    </button>
+                  )}
+                  {resendStatus === "loading" && (
+                    <span className="flex items-center gap-1 text-xs text-red-600">
+                      <Loader2 size={12} className="animate-spin" />Envoi en cours…
+                    </span>
+                  )}
+                  {resendStatus === "sent" && (
+                    <p className="text-xs text-red-700 font-medium">Email renvoyé ! Vérifiez votre boîte mail.</p>
+                  )}
+                  {resendStatus === "limit" && (
+                    <p className="text-xs text-red-700">
+                      Limite de renvoi atteinte. Contactez{" "}
+                      <a href={`mailto:${appConfig.supportEmail}`} className="font-medium underline">
+                        {appConfig.supportEmail}
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
